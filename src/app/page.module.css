@@ -1,5 +1,4 @@
 .home{
-  background-color: rgb(196, 7, 0);
   display: flex;
   width: 100%;
   /* height: 100vh; */
@@ -8,10 +7,9 @@
 .main_container{
   flex: 1;
   /* height: 100vh; */
-  background-color: deepskyblue;
   display: flex;
   justify-content: center;
-  margin-left: 250px; /* margin left should be equivalent to the width of the sidebar */
+  margin-left: 275px; /* margin left should be equivalent to the width of the sidebar */
 }
 
 .main{
@@ -19,17 +17,19 @@
   background-color: rgb(53, 53, 53);
   display: flex;
   flex-direction: column;
-  margin-right: 50px;
+  margin-right: 80px;
+  background-color: red;
 }
 
 #__banner__{
-  background-color: blue;
   max-height: 200px;
 }
 
 .section {
   display: grid;
   grid-template-columns: 1fr 300px ;
+  /* margin-right: 200px; */
+  /* background-color: red; */
 }
 
 .article{
@@ -49,6 +49,7 @@
 
   .main{
     width: 95%;
+    margin: 0 auto;
   }
 
 }
@@ -61,3 +62,14 @@
   }
 }
 
+@media screen and (max-width:768px){
+  .aside{
+    display: none;
+  }
+
+  .section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
