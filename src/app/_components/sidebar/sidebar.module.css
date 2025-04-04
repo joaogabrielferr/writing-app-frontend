@@ -1,0 +1,16 @@
+.aside{
+  width: 250px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  background-color: red;
+  min-height: 100vh;
+  transition: all 0.3s ease-in-out;
+}
+
+/* aside hidden before it overlaps content */
+@media (max-width: 1200px) {
+  .aside {
+    display: none;
+  }
+}
