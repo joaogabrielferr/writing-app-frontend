@@ -1,10 +1,4 @@
 .articles_list{
-    background-color: bisque;
-}
-
-@media screen and (max-width:1500px) {
-    .articles_list{
-        width: 98%;
-        background-color: aquamarine;
-    }
+    width: 95%;
+    margin: 0 auto;
 }

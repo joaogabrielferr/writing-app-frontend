@@ -1,0 +1,31 @@
+.container{
+
+    width: 900px;
+    margin-top: 50px;
+
+}
+
+.title{
+
+    margin-bottom: 20px;
+
+}
+
+.subtitle{
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-style: italic;
+}
+
+.container p{
+    margin-bottom: 30px;
+}
+
+
+@media screen and (max-width:1000px){
+    .container{
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 50px;
+    }
+}

@@ -14,37 +14,29 @@
 
 .main{
   width: 1000px;
-  background-color: rgb(53, 53, 53);
   display: flex;
   flex-direction: column;
   margin-right: 80px;
-  background-color: red;
 }
 
 #__banner__{
-  max-height: 200px;
+  height: 200px;
 }
 
 .section {
   display: grid;
   grid-template-columns: 1fr 300px ;
+  margin-top:20px;
   /* margin-right: 200px; */
-  /* background-color: red; */
 }
 
 .article{
-  background-color: azure;
 }
 
-.aside {
-  position: relative;
-  background-color: #525252;
-}
 
 @media screen and (max-width:1367px) {
   
   .main_container{
-    background-color: skyblue;
   }
 
   .main{
@@ -63,9 +55,6 @@
 }
 
 @media screen and (max-width:768px){
-  .aside{
-    display: none;
-  }
 
   .section{
     display: flex;

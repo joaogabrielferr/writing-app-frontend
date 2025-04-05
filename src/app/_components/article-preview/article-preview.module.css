@@ -1,0 +1,101 @@
+.preview {
+    width: 100%;
+    min-height: 210px; /* Set a fixed height for layout to work */
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgb(48, 48, 48);
+}
+
+.header {
+    height: 10%;
+    padding-top: 5px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.link{
+    display: block; /* Optional: Ensures it behaves like a block element */
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    height: 90%; /* Take the remaining space */
+    display: flex;
+}
+
+.info {
+    width: 75%;
+    height: 100%; /* Now this will work */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* ensures children don't overflow */
+    margin-right: 10px;
+}
+
+.title{
+    width: 100%;
+    min-height: 30%;
+    /* no fixed height here */
+    word-break: break-word;
+    flex-shrink: 0; /* prevent shrinking if space is tight */
+}
+
+.subtitle{
+    padding-top: 5px;
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* show only 2 lines */
+    line-clamp: 2;
+    text-overflow: ellipsis;
+    
+    /* 👇 these are important */
+    line-height: 1.3em;
+    max-height: 2.6em; /* 1.2em x 3 lines */
+}
+
+.img{
+    width: 150px;     /* or whatever fixed size you want */
+    height: 150px;
+    flex-shrink: 0;   /* prevents it from shrinking if space is tight */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or 'contain' if you prefer */
+    /* border-radius: 8px; */
+}
+
+.previewSkeleton{
+    width: 100%;
+    background: linear-gradient(90deg, #bdbdbd 25%, #c8c9c9 50%, #ebebeb 75%);
+    background-size: 200% 100%;
+    min-height: 210px;
+    margin-bottom: 10px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+@media screen and (max-width:1000px) {
+    .img{
+        width: 100px;
+        height: 100px;
+    }
+}
+

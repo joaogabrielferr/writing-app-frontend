@@ -5,28 +5,55 @@
     width: 100%;
     height: 60px;
     z-index: 1000;
-    border-bottom: 1px solid rgb(70, 70, 70);
+    border-bottom: 1px solid rgb(49, 49, 49);
     background-color: black;
   }
   
   .inner_header {
-    width: 98%;
+    width: 99%;
     margin: 0 auto;
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
+    /* padding: 0 1rem; */
   }
-  
+
+
   .logo {
     font-weight: bold;
     font-size: 30px;
   }
+
+  .right{
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
+  }
+
+
+  .avatar {
+    width: 40px; /* Adjust as needed */
+    height: 40px;
+    border-radius: 50%; /* Makes it a perfect circle */
+    background: linear-gradient(90deg, #e0e0e0 25%, #c0c0c0 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: pulse 1s infinite ;
+  }
+  
+  /* Smooth pulse animation */
+  @keyframes pulse {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
   
   /* Responsive */
   @media (max-width: 600px) {
-    .inner_header {
+    /* .inner_header {
       flex-direction: column;
       height: auto;
       padding: 0.5rem;
@@ -34,5 +61,5 @@
   
     .inner_header div {
       margin: 5px 0;
-    }
+    } */
   }

@@ -3,26 +3,25 @@
 
 import Link from "next/link";
 import style from "./header.module.css";
-import { useState } from "react";
+import Button from "../button/button";
 
 export default function Header(){
-
-    const [user,setUser] = useState(null);
-
 
     return (
         <header id = "header" className = {style.header}>
             <div className = {style.inner_header}>
-                <div>
+                <div className = {style.logo_container}>
                     <Link href="/" className = {style.logo}>
                         2VERSO
                     </Link>
                 </div>
                 <div>search bar</div>
-                <div>
-                    <nav>
+                <div className = {style.right}>
+                    <Button text={"Write"} />
+                    <div className = {style.avatar}></div>
+                    {/* <nav>
                         <Link href="/gabriel">Gabriel</Link>
-                    </nav>
+                    </nav> */}
                 </div>
             </div>
         </header>

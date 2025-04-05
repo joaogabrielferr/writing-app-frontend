@@ -1,17 +1,67 @@
+.aside {
+  position: relative;
+  /* background-color: #525252; */
+}
+
 .inner_aside {
   position: sticky;
   top: 60px;
-  height: calc(100vh - 60px); /* Ensure it takes full height */
-  overflow-y: auto; /* Keep the scrollbar space */
+  height: calc(100vh - 80px); 
+  overflow-y: auto; 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-right: 14px; /* Reserve space for the scrollbar */
+  padding-right: 7px; /* Reserve space for the scrollbar */
+  /* border-left: 1px solid rgb(78, 78, 78); */
 
   /* Make scrollbar space reserved but invisible */
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: transparent transparent; /* Hide scrollbar by default */
+  scrollbar-color: transparent transparent;
+  /* scrollbar-color: rgba(255, 255, 255, 0.5) transparent; */
+  
 }
+
+.content{
+  background-color: #000000;;
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid rgb(92, 92, 92);
+  /* margin-top: 10px; */
+}
+
+.inner_content{
+  /* background-color: red; */
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+
+.content:last-child{
+  margin-bottom: 100px;
+}
+
+.skeleton{
+  width: 80%;
+  height: 50px;
+  background: linear-gradient(90deg, #bdbdbd 25%, #c8c9c9 50%, #ebebeb 75%);
+  background-size: 200% 100%;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 
 /* Webkit-based browsers (Chrome, Safari, Edge) */
 .inner_aside::-webkit-scrollbar {
@@ -32,3 +82,11 @@
   background: rgba(255, 255, 255, 0.5); /* Show scrollbar thumb */
   border-radius: 3px;
 }
+
+@media screen and (max-width:768px){
+  .aside{
+    display: none;
+  }
+
+}
+
