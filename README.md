@@ -38,6 +38,10 @@ Basic admin dashboard for reviewing reports
 
 Terms of Use & Content Policy enforcement
 
+### Legal
+
+terms of use
+
 ### Subscription Plans & Payments
 
 Free & paid tiers
