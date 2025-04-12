@@ -27,7 +27,8 @@
   margin: 0 auto;
   margin-bottom: 20px;
   border-radius: 10px;
-  border: 1px solid rgb(92, 92, 92);
+  border: 1px solid rgb(59, 59, 59);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   /* margin-top: 10px; */
 }
 
@@ -45,7 +46,7 @@
 .skeleton{
   width: 80%;
   height: 50px;
-  background: linear-gradient(90deg, #bdbdbd 25%, #c8c9c9 50%, #ebebeb 75%);
+  background: linear-gradient(90deg,  #2e2e2e 25%,#3d3d3d 50%,  #505050 75%);
   background-size: 200% 100%;
   margin: 0 auto;
   margin-bottom: 10px;
