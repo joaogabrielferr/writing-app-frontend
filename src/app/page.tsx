@@ -9,11 +9,10 @@ export default function Home() {
 
   return (
     <>
-    <Header/>
+    <Header location="main"/>
       <div className = {style.home}>
         <Sidebar></Sidebar>
         <div className = {style.main_container}>
-
             <main className = {style.main}>
               
               {/* <div id = {style.__banner__}>

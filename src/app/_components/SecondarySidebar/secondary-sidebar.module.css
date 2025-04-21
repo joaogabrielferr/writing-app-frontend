@@ -4,6 +4,7 @@
 }
 
 .inner_aside {
+  border-left: 1px solid rgb(78, 78, 78);
   position: sticky;
   top: 60px;
   height: calc(100vh - 80px); 
@@ -22,12 +23,11 @@
 }
 
 .content{
-  background-color: #000000;;
+  background-color: #0a0a0a;
   width: 100%;
   margin: 0 auto;
   margin-bottom: 20px;
   border-radius: 10px;
-  border: 1px solid rgb(59, 59, 59);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   /* margin-top: 10px; */
 }

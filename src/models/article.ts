@@ -1,63 +1,48 @@
-import { Component } from "react";
-import { Community } from "./community";
+import { Author } from "./author";
 
 export interface Article{
     id:string;
     title:string;
-    subtitle:string;
-    imgUrl:string | null;
-    authorName:string;
-    authorId:string;
+    content: string;
+    thumbnail:string | null;
+    author:Author;
     createdAt:string;
-    likes:number;
-    commentsCount:number;
-    community: Community | null;
-    components: Component[];
+    subtitle?:string;
+    firstParagraph:string;
 }
 
 export const articleListMock = [
     {
         id:'1-my-first-article-dshasjudohsafjusahgfusjah',
-        authorName:'Gabriel',
+        author:{
+            name:'Gabriel',
+            username:'gabriel'
+        },
         title:'My first article',
-        subtitle:'This is a subtitle',
-        authorId:'gabriel',
-        imgUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSIs158DLx0TN5GOQGHSRqQ6_4IaAE6uugww&s',
+        thumbnail:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSIs158DLx0TN5GOQGHSRqQ6_4IaAE6uugww&s',
         createdAt:'2025-04-02',
-        likes:10,
-        commentsCount:2,
-        community:{
-            id:"com-1",
-            name:"The cool magazine",
-            description:"Only cool articles!!!"
-        } as Community,
-        components:[]
+        firstParagraph:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero voluptatum, voluptate velit, deleniti, quae aspernatur ipsum dicta sunt laudantium veniam maxime? Ab, atque. Autem atque quo inventore aliquid, ut molestias voluptatum, esse ratione provident dignissimos impedit itaque laborum dolore, voluptatibus dolorem magni. Illo ut rerum neque ullam asperiores doloribus voluptatum."
     } as Article,
     {
         id:'2-my-second-article-dshasjudohsafjusahgfusjah',
-        authorName:'Gabriel',
-        authorId:'gabriel',
+        author:{
+            name:'Gabriel',
+            username:'gabriel'
+        },
         title:'This is a more realistic title - and some more text',
-        subtitle:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vestibulum velit elit, in fermentum elit laoreet vitae. Fusce vel facilisis justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales orci sit amet sem porta finibus. Etiam maximus feugiat enim vitae hendrerit. Fusce sit amet ligula ut quam tristique scelerisque a quis nisl. Etiam luctus tincidunt nunc, et auctor ipsum ullamcorper ac. Aenean ultrices consequat quam vitae tempor. Sed gravida ultricies diam, nec auctor est feugiat a. Donec urna lorem, suscipit et urna vel, pharetra suscipit est.',
-        imgUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSctHsRuSti0eiUT_vCSlRAlxYKTsG6UooYrQ&s',
+        thumbnail:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSctHsRuSti0eiUT_vCSlRAlxYKTsG6UooYrQ&s',
         createdAt:'2025-04-02',
-        likes:100000,
-        commentsCount:210,
-        community:null,
-        components:[]
-    } as Article,
+        } as Article,
     {
         id:'3-my-second-article-dshasjudohsafjusahgfusjah',
-        authorName:'Gabriel',
-        authorId:'gabriel',
-        title:'My second article aaaaaaaaaaaaaaaaaaaaaa long title aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        subtitle:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vestibulum velit elit, in fermentum elit laoreet vitae. Fusce vel facilisis justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales orci sit amet sem porta finibus. Etiam maximus feugiat enim vitae hendrerit. Fusce sit amet ligula ut quam tristique scelerisque a quis nisl. Etiam luctus tincidunt nunc, et auctor ipsum ullamcorper ac. Aenean ultrices consequat quam vitae tempor. Sed gravida ultricies diam, nec auctor est feugiat a. Donec urna lorem, suscipit et urna vel, pharetra suscipit est.',
-        imgUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSctHsRuSti0eiUT_vCSlRAlxYKTsG6UooYrQ&s',
+        author:{
+            name:'Gabriel',
+            username:'gabriel'
+        },
+        title:'My second article aaaaaaaaaaaaaaaaaaaaaa long title aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaa aaaaaaaaaa aaaaaaaaaaaa a aaaaaaaaaaa',
+        thumbnail:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSctHsRuSti0eiUT_vCSlRAlxYKTsG6UooYrQ&s',
         createdAt:'2025-04-02',
-        likes:750000,
-        commentsCount:57,
-        community:null,
-        components:[]
+        firstParagraph:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero voluptatum, voluptate velit, deleniti, quae aspernatur ipsum dicta sunt laudantium veniam maxime? Ab, atque. Autem atque quo inventore aliquid, ut molestias voluptatum, esse ratione provident dignissimos impedit itaque laborum dolore, voluptatibus dolorem magni. Illo ut rerum neque ullam asperiores doloribus voluptatum."
     } as Article,
 
 ] as Article[];

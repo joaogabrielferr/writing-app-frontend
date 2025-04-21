@@ -1,6 +1,6 @@
 .preview {
     width: 100%;
-    min-height: 210px; /* Set a fixed height for layout to work */
+    min-height: 180px; /* Set a fixed height for layout to work */
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -26,18 +26,18 @@
 }
 
 .container {
-    height: 90%; /* Take the remaining space */
+    height: 100%;
     display: flex;
-    
 }
 
 .info {
     width: 75%;
-    height: 100%; /* Now this will work */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* ensures children don't overflow */
+    overflow: hidden;
     margin-right: 10px;
+    min-height: 180px;
 }
 
 .title{
@@ -46,6 +46,10 @@
     /* no fixed height here */
     word-break: break-word;
     flex-shrink: 0; /* prevent shrinking if space is tight */
+}
+
+.title:hover{
+    color: var(--purple);
 }
 
 .subtitle{
@@ -57,10 +61,10 @@
     -webkit-line-clamp: 2; /* show only 2 lines */
     line-clamp: 2;
     text-overflow: ellipsis;
-    
+    height: 100%;
     /* 👇 these are important */
-    line-height: 1.3em;
-    max-height: 2.6em; /* 1.2em x 3 lines */
+    line-height: 1.6em;
+    max-height: 3.2em; /* 1.6em x 2 lines */
 }
 
 .img{
@@ -91,6 +95,10 @@
     justify-content: flex-start;
     min-width: 40px;
     gap:5px
+}
+
+.icon{
+    background: var(--purple);
 }
 
 .previewSkeleton{

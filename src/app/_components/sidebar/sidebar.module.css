@@ -1,11 +1,12 @@
 .aside {
-  width: 275px;
+  width: 300px;
   position: fixed;
-  top: 60px;
-  left: 0;
-  border-right: 1px solid rgb(78, 78, 78);
-  background-color: rgb(0, 0, 0);
-  height: calc(100vh - 60px);
+  top: 70px;
+  left: 10px;
+  /* border-right: 1px solid rgb(78, 78, 78); */
+  /* background-color: rgb(0, 0, 0); */
+  background-color: #0a0a0a;
+  height: calc(100vh - 90px);
   overflow-y: auto; /* Keep the scrollbar space */
   /* transition: all 0.3s ease-in-out; */
   padding-right: 10px; /* Reserves space for scrollbar */
@@ -13,13 +14,42 @@
   /* Make scrollbar space reserved but invisible */
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: transparent transparent; /* Hide scrollbar by default */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 /* Content inside sidebar */
 .content {
-  width: calc(100% - 10px); /* Keep content width constant */
-  float: left;
+  /* Keep content width constant */
+  /* width: calc(100% - 10px);  */
+  /* float: left; */
+  /* margin-left:5px; */
+  width: 95%;
+  margin-top: 10px;
+
 }
+
+.skeleton_preview{
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(90deg, #2e2e2e 25%, #3d3d3d 50%, #505050 75%);
+  background-size: 200% 100%;
+  margin-bottom: 10px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 
 /* Webkit-based browsers (Chrome, Safari, Edge) */
 .aside::-webkit-scrollbar {

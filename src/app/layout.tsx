@@ -20,7 +20,7 @@ const geistSans = Geist({
 
 
 export const metadata: Metadata = {
-  title: "2Verso",
+  title: "Escritr",
   description: "Your home for writing",
 };
 

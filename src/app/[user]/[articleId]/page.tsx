@@ -12,7 +12,7 @@ export default async function ArticlePage({
 
     return (
         <>
-          <Header/>
+          <Header location={'article'}/>
           <div className = {style.container}>
 
             <h1 className = {style.title}>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde, ad?</h1>

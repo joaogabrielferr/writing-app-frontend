@@ -4,8 +4,8 @@ import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
-import { Dispatch, memo, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import "./editor.scss";
+import { Dispatch, memo, RefObject, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
+import "./editor-wrapper.scss";
 import { Bold, Heading1, Heading2, ImagePlus, Italic, List, PanelBottomClose, PanelLeftClose, PanelRightClose, PanelTopClose, Strikethrough } from 'lucide-react'
 import {Underline as UnderlineIcon} from 'lucide-react';
 import { LastParagraphMarker } from '@/app/write/extension';
@@ -14,23 +14,25 @@ import Dropcursor from '@tiptap/extension-dropcursor';
 
 
 
-// type Props = {
-//   initialContent?: string
-//   onChange?: (content: string) => void
-// }
+type Props = {
+  initialContent?: string
+  editorRef: RefObject<Editor | null>
+  titleRef:  RefObject<HTMLInputElement | null>;
+  setImagesUploaded: Dispatch<SetStateAction<string[]>>
+}
 
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
 type Location = 'title' | 'subtitle' | 'editor' | null;
 
-export default function TiptapEditor() {
+export default function EditorWrapper({editorRef,titleRef,setImagesUploaded} : Props) {
 
 
   const [toolbarPosition, setToolbarPosition] = useState<Position>('top');
-  const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1120);
+  const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
   const [focusLocation, setFocusLocation] = useState<Location>('editor');
   // const focusLocationRef = useRef<'title' | 'subtitle' | 'editor' | null>('editor');
-  const titleRef = useRef<HTMLInputElement>(null);
+  // const titleRef = useRef<HTMLInputElement>(null);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setisItalic] = useState(false);
   const [isH1, setIsH1] = useState(false);
@@ -47,11 +49,11 @@ export default function TiptapEditor() {
         placeholder: 'Write something ...',
       }),
     ],
-    onUpdate({ editor }) {
-      const html = editor.getHTML();
-      console.log(html);
-      // onChange?.(html);
-    },
+    // onUpdate({ editor }) {
+    //   const html = editor.getHTML();
+    //   console.log(html);
+    //   onChange?.(html);
+    // },
     onCreate({ editor }) {
       editor.commands.focus('start')
     },
@@ -76,9 +78,15 @@ export default function TiptapEditor() {
   
   }, [editor]);
 
+  useEffect(() => {
+    if (editor) {
+      editorRef.current = editor;
+    }
+  }, [editor, editorRef]);
+
   useEffect(()=>{
     function adjust(){
-      setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1120);
+      setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1250);
     }
 
     //scroll the page if the last paragraph is two close to the end of the page
@@ -146,9 +154,10 @@ export default function TiptapEditor() {
   const addImage = useCallback(() => {
     const url = prompt('Enter image URL')
     if (url) {
+      setImagesUploaded(prev => [...prev,url]);
       editor?.chain().focus().setImage({ src: url }).run()
     }
-  }, [editor]);
+  }, [editor,setImagesUploaded]);
 
   const editorContent = useMemo(() => (
     <EditorContent 
@@ -186,7 +195,7 @@ export default function TiptapEditor() {
         toolbarPosition={toolbarPosition} key={'super-cool-toolbar'} isBold = {isBold} isItalic = {isItalic} isH1 = {isH1} isH2 = {isH2} isStrike = {isStrike}
         isUnderline = {isUnderline}
       />
-      <input ref = {titleRef} className = "article-title" placeholder = "The title goes here" 
+      <input ref = {titleRef} className = "article-title" placeholder = "Your title" 
       onFocus={() => {
         setFocusLocation("title")
       }}

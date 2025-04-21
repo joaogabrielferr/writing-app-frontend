@@ -5,12 +5,18 @@
     width: 100%;
     height: 60px;
     z-index: 1000;
-    /* border-bottom: 1px solid rgb(49, 49, 49); */
-    /* background-color: black; */
   }
   
+  .header_background_main{
+    /* border-bottom: 1px solid rgb(49, 49, 49); */
+    background-color: black;
+  }
+
+
+  
+  
   .inner_header {
-    width: 99%;
+    width: 97%;
     margin: 0 auto;
     height: 100%;
     display: flex;
@@ -28,8 +34,10 @@
   .right{
     display: flex;
     width: 150px;
-    justify-content: space-between;
+    justify-content: space-between;  
   }
+
+  
 
 
   .avatar {
@@ -39,6 +47,11 @@
     background: linear-gradient(90deg, #e0e0e0 25%, #c0c0c0 50%, #e0e0e0 75%);
     background-size: 200% 100%;
     animation: pulse 1s infinite ;
+
+  }
+
+  .avatar:last-child {
+    margin-left: auto;
   }
   
   /* Smooth pulse animation */

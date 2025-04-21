@@ -13,28 +13,28 @@ export default function ArticlePreview({article} : props) : JSX.Element{
     return (
         <div className = {style.preview}>
             <div className={style.header}>
-                {article.authorName} {!!article.community ? " for " + article.community.name : ''}
+                {article.author.name}
+                 {/* {!!article.community ? " for " + article.community.name : ''} */}
             </div>
-                <Link href={`${article.authorId}/${article.id}`} className = {style.link}>
+                <Link href={`${article.author.username}/${article.id}`} className = {style.link}>
                     <div className = {style.container}>
                         <div className = {style.info}>
                             <h2 className={style.title}>{article.title}</h2>
-                            <div className={style.subtitle}>{article.subtitle}</div>
+                            <div className={style.subtitle}>{article.firstParagraph}</div>
                         </div>
                         <div className={style.img}>
                             {
-                                article.imgUrl && <img alt = "image" src = {article.imgUrl}></img>
-
+                                article.thumbnail && <img alt = "image" src = {article.thumbnail}></img>
                             }
                         </div>
 
                     </div>
                     <div className = {style.actions}>
                         <span className = {style.icon_container}>
-                        <Heart size={20} /> {article.likes}
+                        <Heart size={20} color="#696be7" fill="#696be7"  /> 10k
                         </span>
                         <span className = {style.icon_container}>
-                        <MessageCircle size={20} /> {article.commentsCount}
+                        <MessageCircle color="#696be7" fill="#696be7" size={20} /> 77
                         </span>
                     </div>
                 </Link>
