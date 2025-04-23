@@ -9,7 +9,7 @@
   
   .header_background_main{
     /* border-bottom: 1px solid rgb(49, 49, 49); */
-    background-color: black;
+    /* background-color: black; */
   }
 
 
@@ -29,7 +29,17 @@
   .logo {
     font-weight: bold;
     font-size: 30px;
+    transition: all 0.3s ease;
   }
+
+  .logo span{
+    color: var(--purple);
+  }
+
+  .logo:hover{
+    color: var(--purple);
+  }
+
 
   .right{
     display: flex;

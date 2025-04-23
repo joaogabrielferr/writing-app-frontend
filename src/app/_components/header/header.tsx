@@ -6,7 +6,7 @@ import style from "./header.module.css";
 import Button from "../button/button";
 
 interface Props{
-    location: 'main' | 'editor' | 'article'
+    location: 'main' | 'editor' | 'other'
     publish?: () => void
 }
 
@@ -17,7 +17,7 @@ export default function Header({location,publish} : Props){
             <div className = {style.inner_header}>
                 <div className = {style.logo_container}>
                     <Link href="/" className = {style.logo}>
-                        <span style = {{'color': 'var(--purple)'}}>E</span>
+                        <span>E</span>
                         SCRITR
                     </Link>
                 </div>
@@ -26,7 +26,7 @@ export default function Header({location,publish} : Props){
                 }
                 <div className = {style.right}>
                     {
-                        (location === 'main'  || location === 'article') && <Button text={"Write"} link="/write" />
+                        (location === 'main'  || location === 'other') && <Button text={"Write"} link="/write" />
                     }
                     {
                         location === 'editor' && <Button text = {'Publish'} click={publish} />

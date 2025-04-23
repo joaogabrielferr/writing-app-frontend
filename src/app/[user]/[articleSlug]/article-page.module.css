@@ -1,0 +1,87 @@
+/* Converted from SCSS for CSS Modules */
+
+.pageEditor {
+    width: 99vw;
+  }
+  
+  .editorContainer {
+    margin: 0 auto;
+    width: 900px;
+    padding-bottom: 100px; /* space for toolbar */
+    margin-top: 70px;
+    margin-bottom: 200px;
+  }
+  
+  .editor {
+    margin: 0 auto;
+    width: 100%;
+    border-radius: 16px;
+    padding: 1rem;
+    /* font-size: 1rem; */
+    line-height: 1.5;
+    background-color: transparent;
+    color: var(--foreground);
+    font-size: 18px;
+  }
+  
+
+  
+  .editor p {
+    margin-bottom: 20px;
+    padding: 10px 0 10px 1px;
+  }
+  
+  .editor h1 {
+    margin-bottom: 40px;
+  }
+  
+  .articleTitle {
+    width: 100%;
+    border: none;
+    min-height: 50px;
+    background-color: transparent;
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-bottom: 40px;
+    color: var(--foreground);
+  }
+  
+
+  
+  .tiptap img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem auto;
+  }
+  
+
+
+  @media (max-width: 600px) {
+    .tiptap img {
+      height: 200px;
+    }
+  }
+  
+
+
+  .articleSubtitle {
+    width: 100%;
+    border: none;
+    height: 50px;
+    background-color: transparent;
+    font-size: 20px;
+    font-style: italic;
+    margin-left: 10px;
+    margin-bottom: 40px;
+    color: var(--foreground);
+  }
+
+
+
+  @media (max-width: 940px) {
+    .editorContainer {
+      width: 95%;
+    }
+  }

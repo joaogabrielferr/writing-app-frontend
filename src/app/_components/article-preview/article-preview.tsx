@@ -16,7 +16,7 @@ export default function ArticlePreview({article} : props) : JSX.Element{
                 {article.author.name}
                  {/* {!!article.community ? " for " + article.community.name : ''} */}
             </div>
-                <Link href={`${article.author.username}/${article.id}`} className = {style.link}>
+                <Link href={`${article.author.username}/${article.slug}`} className = {style.link}>
                     <div className = {style.container}>
                         <div className = {style.info}>
                             <h2 className={style.title}>{article.title}</h2>
@@ -24,7 +24,7 @@ export default function ArticlePreview({article} : props) : JSX.Element{
                         </div>
                         <div className={style.img}>
                             {
-                                article.thumbnail && <img alt = "image" src = {article.thumbnail}></img>
+                                article.thumbnailUrl && <img alt = "image" src = {article.thumbnailUrl}></img>
                             }
                         </div>
 

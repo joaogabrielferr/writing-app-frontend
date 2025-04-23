@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import Header from "../_components/header/header";
 import Profile from "./profile";
 
 type Params = {
@@ -21,12 +21,9 @@ export default async function UserProfilePage({params} : {params: Params}){
     
     return (
         <div>
+            <Header location={'other'}/>
             <h1>Server component: it already has {user} from the url</h1>
-            <Suspense fallback={<div><h2>Inside the fallback, in the server component...</h2></div>}>
-                <Profile userId = {user}></Profile>
-            </Suspense>
-
-
+            <Profile userId = {user}></Profile>
         </div>
     );
 

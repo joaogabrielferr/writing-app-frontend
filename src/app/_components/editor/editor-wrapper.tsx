@@ -183,7 +183,7 @@ export default function EditorWrapper({editorRef,titleRef,setImagesUploaded} : P
         }
       }}
     />
-  ), [editor]);
+  ), [editor,titleRef]);
 
   if (!editor) return null;
 

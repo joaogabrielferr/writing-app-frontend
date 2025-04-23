@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import ArticlePreview, { ArticlePreviewSkeleton } from "../article-preview/article-preview";
 import style from "./articles-list.module.css";
-import { Article, articleListMock } from "@/models/article";
+import { Article } from "@/models/article";
+import api from "@/utils/axios";
+
 
 
 export default function ArticlesList(){
@@ -11,10 +13,11 @@ export default function ArticlesList(){
     const [articles,setArticles] = useState<Article[]>([]);
 
     useEffect(()=>{
-
-        setTimeout(()=>{
-            setArticles([...articleListMock,...articleListMock,...articleListMock,...articleListMock,...articleListMock]);
-        },500);
+        api.get<{content:Article[]}>("/articles").then((response)=>{
+            setArticles(response.data.content);
+        }).catch((error)=>{
+            console.error(error);
+        });
 
     },[]);
     
@@ -32,9 +35,8 @@ export default function ArticlesList(){
     return (
         <div className = {style.articles_list}>
             <div className="inner-articles-list">
-                {
-                     
-                    articles.map(a => <ArticlePreview article={a} key = {a.id + Math.floor(Math.random() * (100))}></ArticlePreview>)
+                {    
+                    articles.map(a => <ArticlePreview article={a} key = {a.id}></ArticlePreview>)
                 }            
             </div>
         </div>
