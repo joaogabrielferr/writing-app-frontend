@@ -8,7 +8,7 @@ import { Dispatch, memo, RefObject, SetStateAction, useCallback, useEffect, useM
 import "./editor-wrapper.scss";
 import { Bold, Heading1, Heading2, ImagePlus, Italic, List, PanelBottomClose, PanelLeftClose, PanelRightClose, PanelTopClose, Strikethrough } from 'lucide-react'
 import {Underline as UnderlineIcon} from 'lucide-react';
-import { LastParagraphMarker } from '@/app/write/extension';
+import { LastParagraphMarker } from '@/app/_components/editor/extension';
 import Underline from '@tiptap/extension-underline';
 import Dropcursor from '@tiptap/extension-dropcursor';
 
@@ -18,14 +18,13 @@ type Props = {
   initialContent?: string
   editorRef: RefObject<Editor | null>
   titleRef:  RefObject<HTMLInputElement | null>;
-  setImagesUploaded: Dispatch<SetStateAction<string[]>>
 }
 
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
 type Location = 'title' | 'subtitle' | 'editor' | null;
 
-export default function EditorWrapper({editorRef,titleRef,setImagesUploaded} : Props) {
+export default function EditorWrapper({editorRef,titleRef,} : Props) {
 
 
   const [toolbarPosition, setToolbarPosition] = useState<Position>('top');
@@ -154,10 +153,9 @@ export default function EditorWrapper({editorRef,titleRef,setImagesUploaded} : P
   const addImage = useCallback(() => {
     const url = prompt('Enter image URL')
     if (url) {
-      setImagesUploaded(prev => [...prev,url]);
       editor?.chain().focus().setImage({ src: url }).run()
     }
-  }, [editor,setImagesUploaded]);
+  }, [editor]);
 
   const editorContent = useMemo(() => (
     <EditorContent 

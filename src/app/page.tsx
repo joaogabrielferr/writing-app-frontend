@@ -1,8 +1,8 @@
-import style from "./page.module.css";
 import SecondarySidebar from "./_components/SecondarySidebar/secondary-sidebar";
 import Sidebar from "./_components/sidebar/sidebar";
 import Header from "./_components/header/header";
 import ArticlesList from "./_components/articles-list/articles-list";
+import "./page.scss";
 
 export default function Home() {
 
@@ -10,17 +10,24 @@ export default function Home() {
   return (
     <>
     <Header location="main"/>
-      <div className = {style.home}>
+      <div className = "main_page_home">
         <Sidebar></Sidebar>
-        <div className = {style.main_container}>
-            <main className = {style.main}>
-              
-              {/* <div id = {style.__banner__}>
+        <div className = "main_page_main_container">
+            <main className = "main_page_main">
+              {/* <div id = "__banner__">
                 content
               </div> */}
-              
-              <section className = {style.section}>
-                <article className = {style.article}>
+              {/* <div id = "__tags__">
+                <button>Self improvement</button>
+                <button>Relationships</button>
+                <button>Technology</button>
+                <button>Gaming</button>
+                <button>Politics</button>
+                <button>Marketing</button>
+                <button>Travel</button>
+              </div> */}
+              <section className = "main_page_section">
+                <article className = "main_page_article">
                   <ArticlesList></ArticlesList>
                 </article>
                 <SecondarySidebar></SecondarySidebar>

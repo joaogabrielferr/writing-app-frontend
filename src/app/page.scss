@@ -1,10 +1,10 @@
-.home{
+.main_page_home{
   display: flex;
   width: 100%;
   /* height: 100vh; */
 }
 
-.main_container{
+.main_page_main_container{
   flex: 1;
   /* height: 100vh; */
   display: flex;
@@ -15,7 +15,7 @@
   margin-top: 10px;
 }
 
-.main{
+.main_page_main{
   width: 950px;
   display: flex;
   flex-direction: column;
@@ -23,26 +23,54 @@
 }
 
 #__banner__{
-  height: 200px;
+  height: 150px;
+  width: 100%;
+  background-color: red;
 }
 
-.section {
+.main_page_section {
   display: grid;
   grid-template-columns: 1fr 300px ;
   margin-top:20px;
-  /* margin-right: 200px; */
 }
 
-.article{
+#__tags__{
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  button{
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(59, 59, 59);
+    border-radius: 10px;
+    color: white;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+  
+    
+  &:hover{
+    background-color: #4e4e4e;
+  }
+  }
 }
 
 
 @media screen and (max-width:1367px) {
   
-  .main_container{
-  }
 
-  .main{
+  .main_page_main{
     width: 95%;
     margin: 0 auto;
   }
@@ -52,14 +80,14 @@
 @media screen and (max-width:1200px) {
 
   /* at 1200px the sidebar is hidden, so remove the margin left */
-  .main_container{
+  .main_page_main_container{
     margin-left: 0px;
   }
 }
 
 @media screen and (max-width:768px){
 
-  .section{
+  .main_page_section{
     display: flex;
     justify-content: center;
     align-items: center;

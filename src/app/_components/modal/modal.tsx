@@ -40,7 +40,6 @@ export default function Modal({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-  console.log(loading);
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true">
       <div className={`${styles.modal} ${styles[size]}`}>

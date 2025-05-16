@@ -2,3 +2,11 @@
     width: 95%;
     margin: 0 auto;
 }
+
+.load_more{
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
