@@ -1,34 +1,26 @@
 'use client'
 
-import { useEffect, useState } from "react";
 import ArticlePreview, { ArticlePreviewSkeleton } from "../article-preview/article-preview";
 import style from "./articles-list.module.css";
 import { Article } from "@/models/article";
-import api from "@/utils/axios";
 import Button from "../button/button";
 
 
+interface Props{
+    articles: Article[];
+}
 
-export default function ArticlesList(){
+export default function ArticlesList({articles} : Props){
 
-    const [articles,setArticles] = useState<Article[]>([]);
-    const [error,setError] = useState<boolean>(false);
+    // const [error,setError] = useState<boolean>(false);
 
 
-    useEffect(()=>{
-        api.get<{content:Article[]}>("/articles").then((response)=>{
-            setArticles(response.data.content);
-        }).catch(()=>{
-            setError(true);
-        });
 
-    },[]);
-
-    if(error){
-        return <div  className = {style.articles_list}>
-            There was a problem loading the articles. Please try again later.
-        </div>
-    }
+    // if(error){
+    //     return <div  className = {style.articles_list}>
+    //         There was a problem loading the articles. Please try again later.
+    //     </div>
+    // }
     
     if(!articles?.length){
         return <div className = {style.articles_list}>

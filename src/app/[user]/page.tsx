@@ -1,29 +1,62 @@
+'use client'
+
+import { Article } from "@/models/article";
 import Header from "../_components/header/header";
 import Profile from "./profile";
+import { useEffect, useState } from "react";
+import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
+import { useUser } from "@/context/auth-context";
+import api from "@/lib/api";
 
-type Params = {
-    user: string; // This is the dynamic parameter from the route ([user])
-  };
+interface ProfileData{
+    articles:Article[] | null;
+    error:boolean;
+}
 
-export default async function UserProfilePage({params} : {params: Params}){
+export default function UserProfilePage(){
+    
+   const [profileFetchData, setProfileFetchData] = useState<ProfileData | null>(null);
+    const [profileDataIsLoading, setProfileDataIsLoading] = useState(true);
 
-    const { user } = await params;
-    console.log(user);
+    const { isAuthenticated, isLoading: authIsLoading } = useUser();
 
-    await new Promise((resolve)=>{
-        setTimeout(()=>{
-            console.log("timeout finished, now returning from server component");
-            console.log(user);
-            resolve({});
-        },1000);
-    });
+
+
+    useEffect(() => {
+        if (!authIsLoading) {
+            const loadProfileData = async () => {
+                setProfileDataIsLoading(true);
+                try {
+                    const response = await api.get<{ content: Article[] }>(`/articles/user/gabriel`);
+
+                    console.log("Profile data API response:", response);
+                    if (response && response.data && response.data.content) {
+                        setProfileFetchData({ articles: response.data.content,error:false});
+                    } else {
+                        // Handle cases where response might be ok but data is not in expected format
+                        console.warn("Profile data response was not in the expected format:", response);
+                        setProfileFetchData({ articles: null,error:false});
+                    }
+                } catch (error: unknown) {
+                    console.error("Failed to fetch profile data:", error);
+                    setProfileFetchData({articles:null,error:true});
+                } finally {
+                    setProfileDataIsLoading(false);
+                }
+            };
+            loadProfileData();
+        }
+    }, [authIsLoading, isAuthenticated]); 
 
     
+    if (authIsLoading || profileDataIsLoading) {
+        return <SplashScreenOverlay />;
+    }
     return (
         <div>
             <Header location={'other'}/>
-            <h1>Server component: it already has {user} from the url</h1>
-            <Profile userId = {user}></Profile>
+            <h1>profile</h1>
+            <Profile data = {profileFetchData}/>
         </div>
     );
 

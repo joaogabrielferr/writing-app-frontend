@@ -4,6 +4,8 @@
   --background: #141414;
   --foreground: #d1d1d1;
   --purple: #696be7;
+    --purple-glow: rgba(138, 43, 226, 0.3);
+  --accent-pink: #FF69B4; /* Hot Pink for a bit more pop */
 }
 
 @media (prefers-color-scheme: dark) {

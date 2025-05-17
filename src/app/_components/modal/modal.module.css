@@ -35,6 +35,10 @@
   .large {
     max-width: 800px;
   }
+
+  .xlarge{
+    max-width: 1000px;
+  }
   
   .header {
     padding: 1.25rem 1.5rem;

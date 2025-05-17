@@ -4,13 +4,14 @@ import { useRef, useState } from "react";
 import { Editor } from '@tiptap/react'
 import Header from "../_components/header/header";
 import EditorWrapper from "../_components/editor/editor-wrapper";
-import api from '../../utils/axios';
 import Modal from "../_components/modal/modal";
 import { FullscreenLoader } from "../_components/fullscreen-loading/fullscreen-loading";
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
-import Button from "../_components/button/button";
 import { Pen } from "lucide-react";
+import api from "@/lib/api";
+import { useUser } from "@/context/auth-context";
+import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
 
 interface Preview{
   title:string,
@@ -25,6 +26,8 @@ export default function WritePage(){
 
     const router = useRouter();
 
+    const {isLoading: AuthIsLoading,isAuthenticated} = useUser();
+
     const editorRef = useRef<Editor | null>(null);
     const titleRef = useRef<HTMLInputElement | null>(null);
     const [imagesUploaded,setImagesUploaded] = useState<string[]>([]);
@@ -35,6 +38,11 @@ export default function WritePage(){
     const [preview,setPreview] = useState<Preview>();
 
     const [isPreviewModalOpen,setIsPreviewModalOpen] = useState(false);
+
+    if(!AuthIsLoading && !isAuthenticated && router){
+        router.replace("/login");
+    }
+
 
     function handleAction(){
       console.log("aqui");
@@ -101,6 +109,12 @@ export default function WritePage(){
       setImagesUploaded([imagesUploaded[index],...imagesUploaded.filter((_,i) => i != index)]);
     }
 
+    if(AuthIsLoading || !isAuthenticated){
+
+      return <SplashScreenOverlay/>
+
+    }
+
     return (
         <div>
             <Header location="editor" publish={publish}/>
@@ -122,7 +136,7 @@ export default function WritePage(){
             isOpen={isPreviewModalOpen}
             onClose={()=>setIsPreviewModalOpen(false)}
             title="You're about to publish your story!"
-            size="large"
+            size="xlarge"
             actionText="Publish"
             loading={loading}
             showCancelButton={true}
@@ -151,27 +165,31 @@ function MyPreview({preview,imagesUploaded,changeImage} : {preview:Preview, imag
 
   return (
     <div>
-      <div>
-        <p className = {styles.description}>
-          The thumbnail is the image readers will see along side the title in the story preview.
-          <br/>
-          { imagesUploaded.length ? <Button text="edit" bgColor="transparent" fontColor="purple" Icon={Pen} click={()=>setIsOpen(true)}></Button> : null}
-        </p>
-        <div className = {styles.img}>
-          {preview.thumbnailUrl ?
-            <div className = {styles.imgContainer}>
-              <img alt = "image" src = {preview.thumbnailUrl!}></img>
-              </div>
-          : <div className = {styles.imgPlaceholder}>
+
+      <div className={styles.container}>
+      <div className={styles.column}>
+        <p>The thumbnail is the image that appears alongside the title of your story in the homepage.</p>
+        {imagesUploaded?.length ? <button onClick={()=>setIsOpen(true)} className = {styles.button}>Edit thumbnail<>&nbsp;</><Pen size={16}/></button> : null}
+        {preview?.thumbnailUrl ? (
+          <img
+            src={preview!.thumbnailUrl}
+            alt="Preview"
+            width={250}
+            height={150}
+            className={styles.image}
+          />
+        ) : (
+          <div className={styles.placeholder}>
             Include a high-quality image in your story to make it more inviting to readers.
           </div>
-        }
-      
-        </div>
-        <div>
-          select community here
-        </div>
+        )}
       </div>
+      <div className={styles.column}>
+        <p>Select a community to post the story on. Or keep it unselected if you want to post it as a standalone story.</p>
+        <input type="text" className={styles.input} />
+      </div>
+    </div>
+
     <Modal
         isOpen={isOpen}
         onClose={()=>setIsOpen(false)}
@@ -183,7 +201,7 @@ function MyPreview({preview,imagesUploaded,changeImage} : {preview:Preview, imag
         loading={false}
     >
       
-      <div className = {styles.grid}>
+      <div className = {styles.imgSelectionGrid}>
 
       {
         imagesUploaded.map((image,index) =>{

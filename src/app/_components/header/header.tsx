@@ -6,6 +6,7 @@ import style from "./header.module.css";
 import Button from "../button/button";
 import { useEffect, useState } from "react";
 import SearchBar from "../search-bar/search-bar";
+import { useUser } from "@/context/auth-context";
 
 interface Props{
     location: 'main' | 'editor' | 'other'
@@ -13,6 +14,11 @@ interface Props{
 }
 
 export default function Header({location,publish} : Props){
+
+    const {user,isAuthenticated,logout,isLoading} = useUser();
+    
+    console.log(user,isAuthenticated);
+
     console.log(location);
     const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
     const [scrolled,setScrolled] = useState(false);
@@ -51,6 +57,7 @@ export default function Header({location,publish} : Props){
 
         }
         ,[scrolled,location]);
+    
 
     return (
         <header id = "header" className = {`${style.header} ${scrolled ? style.scrolled : ''}`}>
@@ -61,16 +68,41 @@ export default function Header({location,publish} : Props){
                         SCRITR
                     </Link>
                 </div>
-                {
+                {/* {
                     (location === 'main' && !isMobile) && <SearchBar></SearchBar>
-                }
+                } */}
+                <div>
+                    isAuthenticated: {String(isAuthenticated)}
+                </div>
                 <div className = {style.right}>
                     {
-                        (location === 'main'  || location === 'other') && <Button text={"Write"} link="/write" />
+                        ((location === 'main'  || location === 'other') && isAuthenticated) && <Button text={"Write"} link="/write" />
                     }
                     {
-                        location === 'editor' && <Button text = {'Publish'} click={publish} />
+                        (location === 'editor' && isAuthenticated) && <Button text = {'Publish'} click={publish} />
                     }
+
+                    {
+                        isLoading ? <>loading</> : (
+                                <>
+                                    {
+                                        !isAuthenticated ? <Link href={"/register"}><Button bgColor="purple" fontColor="white" text = "Sign up"/></Link> : null
+                                    }
+                                    {
+                                        !isAuthenticated ? <Link href={"/login"}><Button text = "Sign in"/></Link> : null
+                                    }
+
+                                    {
+                                        isAuthenticated && <Button click={logout} text = "Sign out"/>
+                                    }
+                                </>
+                        )
+                    }
+                    
+                        
+                    
+
+
                     <div className = {style.avatar}></div>
                 </div>
             </div>

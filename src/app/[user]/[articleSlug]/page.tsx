@@ -11,7 +11,7 @@ export default async function ArticlePage({
     const {articleSlug} = await params;
     console.log(articleSlug);
     const data = await fetch(`http://localhost:8080/api/articles/slug/${articleSlug}`, {
-      next: { revalidate: 120 }, //TODO: revalidate only after article changes
+      next: { revalidate: 3600 }, //TODO: revalidate only after article changes
     })
     const article : Article = await data.json();
 

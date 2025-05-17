@@ -2,7 +2,7 @@
 import { useEffect, ReactNode } from "react";
 import styles from "./modal.module.css";
 
-type ModalSize = "small" | "medium" | "large";
+type ModalSize = "small" | "medium" | "large" | "xlarge";
 
 interface ModalProps {
   isOpen: boolean;
