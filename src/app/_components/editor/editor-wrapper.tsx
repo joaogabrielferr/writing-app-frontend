@@ -4,14 +4,18 @@ import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
-import { Dispatch, memo, RefObject, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
+import { Dispatch, memo, RefObject, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import "./editor-wrapper.scss";
 import { Bold, Heading1, Heading2, ImagePlus, Italic, List, PanelBottomClose, PanelLeftClose, PanelRightClose, PanelTopClose, Strikethrough } from 'lucide-react'
 import {Underline as UnderlineIcon} from 'lucide-react';
 import { LastParagraphMarker } from '@/app/_components/editor/extension';
 import Underline from '@tiptap/extension-underline';
 import Dropcursor from '@tiptap/extension-dropcursor';
-
+import { ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY, DRAFT_LOCAL_STORAGE_KEY } from '@/global-variables';
+import api from '@/lib/api'
+import Modal from '../modal/modal'
+import axios from 'axios'
+import { FullscreenLoader } from '../fullscreen-loading/fullscreen-loading'
 
 
 type Props = {
@@ -39,6 +43,10 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
   const [isStrike,setIsStrike] = useState(false);
   const [isUnderline,setIsUnderline] = useState(false);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingImage,setIsUploadingImage] = useState(false);
+  const [isModalUploadErrorOpen,setIsModaulUploadErrorOpen] = useState(false);
+  const [uploadImageError,setUploadImageError] = useState('');
   
   const editor = useEditor({
     extensions: [
@@ -59,13 +67,11 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
     immediatelyRender:false,
   });
 
+
   useEffect(() => {
     if (!editor) return;
     
     //necessary for good performance
-    //in the last iteration the toolbar was getting rerendered on every key press
-    //so it to a memoed component and this is how im able to update it imediatly after using a tool
-    //problem solved aeee
     editor.on('transaction', () => {
       setIsBold(editor.isActive('bold'));
       setisItalic(editor.isActive('italic'));
@@ -76,6 +82,28 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
     });
   
   }, [editor]);
+
+  useEffect(()=>{
+    if (!editor) return;
+
+      setInterval(()=>{
+        
+        const content = editor?.getHTML();
+        const images:string[] = [];
+        editor.state.doc.descendants((node) => {
+          if (node.type.name === 'image' && node.attrs.src) {
+            images.push(node.attrs.src);
+          }
+        });
+
+        const title = titleRef.current?.value;
+
+        localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title}));
+
+      },5000);
+      
+  },[editor,titleRef]);
+
 
   useEffect(() => {
     if (editor) {
@@ -150,11 +178,69 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
   // },[editor]);
 
 
-  const addImage = useCallback(() => {
-    const url = prompt('Enter image URL')
-    if (url) {
-      editor?.chain().focus().setImage({ src: url }).run()
+
+  const addImage = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const file = event?.target?.files?.[0];
+
+    if(!file)return;
+
+    if(!editor){
+      console.error("editor not available");
+      return;
     }
+    
+    setIsUploadingImage(true);
+
+    const formData = new FormData();
+    formData.append('file',file);
+
+    try{
+
+      const response = await api.post("/articles/image",formData);
+      
+      const url = response?.data?.url;
+      if(url){
+
+        editor.chain().focus().setImage({src:url}).run();
+        const data = localStorage.getItem(ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY);
+        let images;
+        if(data){
+          images = JSON.parse(data);
+          if(images?.items?.length){
+            images.items.push(url);
+          }else{
+            images = {items:[url]};
+          }
+        }else{
+          images = {items:[url]};
+        }
+        localStorage.setItem(ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY,JSON.stringify(images));
+      }
+
+    }catch(error){
+
+      if(axios.isAxiosError(error) && error.response){
+        const status = error.response.status;
+        if (status === 401 || status === 403) {
+          setUploadImageError("Authentication failed. Please log in again.");
+        }else if(status == 400 || status == 500){
+          setUploadImageError("We couldn't save your image in our servers. Please try again later.");
+        }else{
+          setUploadImageError("That was a problem saving your image. Check your internet connection and try again later.");
+        }
+      }else{
+        // Network error or other non-Axios error
+        setUploadImageError("A network error occurred, or the server is unreachable. Please check your connection.");
+      }
+
+    }finally {
+      setIsUploadingImage(false);
+      if (event.target) {
+        event.target.value = '';
+      }
+    }
+
   }, [editor]);
 
   const editorContent = useMemo(() => (
@@ -183,13 +269,18 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
     />
   ), [editor,titleRef]);
 
+  const triggerAddImage = useCallback(() => {
+    // Instead of prompt, trigger the hidden file input
+    fileInputRef.current?.click();
+  }, []);
+
   if (!editor) return null;
 
 
   return (
     <div className = "pageEditor">
     <div className = "editorContainer">
-      <Toolbar editor={editor} addImage={addImage} focusLocation={focusLocation} isMobile = {isMobile} setToolbarPosition={setToolbarPosition}
+      <Toolbar editor={editor} addImage={triggerAddImage} focusLocation={focusLocation} isMobile = {isMobile} setToolbarPosition={setToolbarPosition}
         toolbarPosition={toolbarPosition} key={'super-cool-toolbar'} isBold = {isBold} isItalic = {isItalic} isH1 = {isH1} isH2 = {isH2} isStrike = {isStrike}
         isUnderline = {isUnderline}
       />
@@ -207,6 +298,27 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
       ></input>
       {editorContent}
     </div>
+    <input
+    type="file"
+    ref={fileInputRef}
+    onChange={addImage}
+    style={{ display: 'none' }}
+    accept="image/png, image/jpeg, image/gif, image/webp"
+    />
+    <Modal
+        isOpen={isModalUploadErrorOpen}
+        onClose={()=>setIsModaulUploadErrorOpen(false)}
+        title="We coudn't upload your image"
+        size="small"
+        actionText="Close"
+        showCancelButton={false}
+        onAction={()=>setIsModaulUploadErrorOpen(false)}
+        loading={false}
+    >
+      {uploadImageError}
+    </Modal>
+
+    {isUploadingImage && <FullscreenLoader text="Uploading your image..." />}
     </div>
   )
 }

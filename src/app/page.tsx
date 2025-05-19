@@ -5,7 +5,7 @@ export default function Home() {
 
   return (
     <>
-      {/* content is defined in middleware */}
+      {/* content is defined in middleware, either landing page or feed*/}
     </>
   );
 }

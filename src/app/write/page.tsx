@@ -12,6 +12,7 @@ import { Pen } from "lucide-react";
 import api from "@/lib/api";
 import { useUser } from "@/context/auth-context";
 import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
+import { ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY, DRAFT_LOCAL_STORAGE_KEY } from "@/global-variables";
 
 interface Preview{
   title:string,
@@ -43,7 +44,6 @@ export default function WritePage(){
         router.replace("/login");
     }
 
-
     function handleAction(){
       console.log("aqui");
       setIsPreviewModalOpen(false);
@@ -74,11 +74,22 @@ export default function WritePage(){
 
       const images: string[] = [];
       editorRef.current?.state.doc.descendants((node) => {
-      if (node.type.name === 'image' && node.attrs.src) {
-        images.push(node.attrs.src);
-      }
-    });
+        if (node.type.name === 'image' && node.attrs.src) {
+          images.push(node.attrs.src);
+        }
+      });
 
+     localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title}));
+
+
+     //images uploaded but removed later by user
+     const data = localStorage.getItem(ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY);
+     if(data){
+      const allImages = JSON.parse(data);
+      console.log("all images:",allImages);
+      const imagesToDelete = (allImages.items as string[]).filter(i => !images.some(imageInContent => i === imageInContent));
+      console.log("images to delete:",imagesToDelete);
+    }
 
       setImagesUploaded(images);
       

@@ -60,7 +60,7 @@ export default function Header({location,publish} : Props){
     
 
     return (
-        <header id = "header" className = {`${style.header} ${scrolled ? style.scrolled : ''}`}>
+        <header id = "header" className = {`${style.header} ${scrolled ? style.scrolled : ''} ${location !== 'editor' ? style.border : ''}`}>
             <div className = {style.inner_header}>
                 <div className = {style.logo_container}>
                     <Link href="/" className = {style.logo}>
