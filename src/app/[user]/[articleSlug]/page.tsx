@@ -23,9 +23,13 @@ export default async function ArticlePage({
 
             <div className = {style.articleTitle}>{article.title}</div>  
 
-            <div className = {style.articleSubtitle}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, facilis.
-            </div>
+            {
+              article.subtitle ?
+              <div className = {style.articleSubtitle}>
+                {article.subtitle}
+              </div>
+              : null
+            }
 
             <p>
               {articleSlug}

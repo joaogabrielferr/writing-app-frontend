@@ -1,9 +1,10 @@
 'use client'
 
-import { House, ScrollText, Search, ShieldCheck, Users } from "lucide-react";
+import { Bookmark, House, Pen, Search, ShieldCheck, Users } from "lucide-react";
 import style from "./sidebar.module.css";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Sidebar(){
     const path = usePathname();
@@ -39,9 +40,9 @@ export default function Sidebar(){
                         {!isMobile && <span>Premium</span>
                         }
                     </button>
-                    <button className = {`${style.button} ${path === '/lists' ? style.selected : ''}`}>
-                        <span><ScrollText /></span>
-                        {!isMobile && <span>Lists</span>
+                    <button className = {`${style.button} ${path === '/bookmarks' ? style.selected : ''}`}>
+                        <span><Bookmark /></span>
+                        {!isMobile && <span>Bookmarks</span>
                         }
                     </button>
                     <button className = {`${style.button} ${path === '/search' ? style.selected : ''}`}>
@@ -54,6 +55,11 @@ export default function Sidebar(){
                         {!isMobile && <span>Communities</span>
                         }
                     </button>
+                    <Link href = {"/write"}  className = {`${style.button} ${path === '/write' ? style.selected : ''}`}>
+                            <span><Pen /></span>
+                            {!isMobile && <span>Write</span>
+                            }
+                    </Link>
                 </div>
                 {
                     a.map((i,idx) => <div key = {i + idx} className = {style.skeleton_preview}></div>)

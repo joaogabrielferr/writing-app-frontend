@@ -16,34 +16,6 @@
   min-width: 99vw;
 }
 
-.container::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  left: -20%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(circle, var(--purple-glow) 0%, transparent 70%);
-  filter: blur(80px);
-  z-index: 0;
-  opacity: 0.7;
-  animation: pulseGlow 8s infinite alternate;
-}
-
-/* .container::after {
-  content: '';
-  position: absolute;
-  bottom: -20%;
-  right: 0%;
-  width: 100%;
-  height: 30%;
-  background: radial-gradient(circle, var(--purple) 0%, transparent 100%);
-  filter: blur(100vw);
-  z-index: 0;
-  opacity: 0.6;
-  animation: pulseGlow 10s infinite alternate-reverse;
-} */
-
 @keyframes pulseGlow {
   from {
     transform: scale(0.9);
@@ -63,8 +35,11 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  max-width: 80%;
-  margin-bottom: 200px;
+  width: 50%;
+  margin-bottom: 100px;
+}
+
+.hero{
 }
 
 .title {
@@ -73,7 +48,6 @@
   letter-spacing: -0.05em;
   line-height: 1.1;
   margin-bottom: 0.5rem;
-  /* text-shadow: 0 0 15px var(--purple-glow); */
   animation: fadeInDown 1s ease-out;
   font-size: 10rem;
 }
@@ -109,7 +83,7 @@
 }
 
 .loginButton {
-  background: linear-gradient(45deg, var(--purple), var(--accent-pink));
+  background: linear-gradient(45deg, var(--purple), var(--light-purple));
   color: white;
   border: none;
   padding: 0.8rem 2rem;
@@ -124,6 +98,7 @@
   background-size: 200% 200%;
   animation: fadeInUp 1.6s ease-out 0.9s, gradientShift 5s ease infinite;
   animation-fill-mode: backwards;
+  margin-top: 50px;
 }
 
 .loginButton:hover,
@@ -164,8 +139,14 @@
 
 /* Responsive adjustments if needed */
 @media (max-width: 768px) {
+
+  .container{
+    justify-content: flex-start;
+  }
+
+
   .title {
-    font-size: 3.5rem;
+    font-size: 5rem;
   }
   .slogan {
     font-size: 1.2rem;

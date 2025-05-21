@@ -4,9 +4,10 @@
 import Link from "next/link";
 import style from "./header.module.css";
 import Button from "../button/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchBar from "../search-bar/search-bar";
 import { useUser } from "@/context/auth-context";
+import { LogOut, User } from "lucide-react";
 
 interface Props{
     location: 'main' | 'editor' | 'other'
@@ -17,11 +18,11 @@ export default function Header({location,publish} : Props){
 
     const {user,isAuthenticated,logout,isLoading} = useUser();
     
-    console.log(user,isAuthenticated);
-
     console.log(location);
     const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
-    const [scrolled,setScrolled] = useState(false);
+
+      const [open, setOpen] = useState(false);
+      const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(()=>{
         function adjust(){
@@ -37,30 +38,21 @@ export default function Header({location,publish} : Props){
       },[location]);
     
 
-    useEffect(()=>{
-        function addHeaderBackground(){
-            if(location !== 'editor'){
-                if(window.scrollY > 10 && !scrolled){
-                    setScrolled(true);
-                }
-                if(window.scrollY <= 10 && scrolled){
-                    setScrolled(false);
-                }
-            }
-        }
-                
-        window.addEventListener('scroll',addHeaderBackground);
-        
-        return () =>{
-            window.removeEventListener('scroll',addHeaderBackground);
-        }
 
+   
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setOpen(false);
         }
-        ,[scrolled,location]);
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
     
 
     return (
-        <header id = "header" className = {`${style.header} ${scrolled ? style.scrolled : ''} ${location !== 'editor' ? style.border : ''}`}>
+        <header id = "header" className = {`${style.header} ${(location !== 'editor') ? style.border : ''}`}>
             <div className = {style.inner_header}>
                 <div className = {style.logo_container}>
                     <Link href="/" className = {style.logo}>
@@ -71,9 +63,6 @@ export default function Header({location,publish} : Props){
                 {/* {
                     (location === 'main' && !isMobile) && <SearchBar></SearchBar>
                 } */}
-                <div>
-                    isAuthenticated: {String(isAuthenticated)}
-                </div>
                 <div className = {style.right}>
                     {
                         ((location === 'main'  || location === 'other') && isAuthenticated) && <Button text={"Write"} link="/write" />
@@ -91,10 +80,6 @@ export default function Header({location,publish} : Props){
                                     {
                                         !isAuthenticated ? <Link href={"/login"}><Button text = "Sign in"/></Link> : null
                                     }
-
-                                    {
-                                        isAuthenticated && <Button click={logout} text = "Sign out"/>
-                                    }
                                 </>
                         )
                     }
@@ -102,8 +87,40 @@ export default function Header({location,publish} : Props){
                         
                     
 
+                    
+                    <div className = {style.avatarContainer} ref={menuRef}>
+                        {user?.id ?
+                            
+                            (
+                                user?.avatar ?
+                                <img
+                                 src={user.avatar}
+                                 alt="User Avatar"
+                                 onClick={() => setOpen(prev => !prev)}
+                                 />
+                                 : <div onClick={() => setOpen(prev => !prev)} className = {style.avatar_no_picture}>{user?.username?.[0]?.toLocaleUpperCase()}</div>
 
-                    <div className = {style.avatar}></div>
+                            )
+                            : <div className = {style.avatarPlaceholder}></div>
+                        }
+                        {(open && isAuthenticated) && (
+                        <div className={style.dropdown}>
+                            {
+                                user?.avatar ?
+                                <img
+                                 src={user.avatar}
+                                 alt="User Avatar"
+                                 />
+                                 : <div className = {style.avatar_no_picture_large}>{user?.username?.[0]?.toLocaleUpperCase()}</div>
+
+                            }
+                            <Link className = {style.link} href={`/${user!.username}`}>
+                                <button className={style.item}><User size = {14}/>Profile</button>
+                            </Link>
+                            <button onClick = {logout} className={style.item}> <LogOut size = {14}/> Logout</button>
+                        </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </header>

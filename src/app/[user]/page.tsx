@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
 import { useUser } from "@/context/auth-context";
 import api from "@/lib/api";
+import styles from './user.module.css';
 
 interface ProfileData{
     articles:Article[] | null;
@@ -53,7 +54,7 @@ export default function UserProfilePage(){
         return <SplashScreenOverlay />;
     }
     return (
-        <div>
+        <div className = {styles.container}>
             <Header location={'other'}/>
             <h1>profile</h1>
             <Profile data = {profileFetchData}/>

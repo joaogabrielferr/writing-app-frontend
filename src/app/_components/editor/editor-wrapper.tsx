@@ -22,20 +22,20 @@ type Props = {
   initialContent?: string
   editorRef: RefObject<Editor | null>
   titleRef:  RefObject<HTMLInputElement | null>;
+  subtitleRef:  RefObject<HTMLInputElement | null>;
 }
 
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
 type Location = 'title' | 'subtitle' | 'editor' | null;
 
-export default function EditorWrapper({editorRef,titleRef,} : Props) {
+export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) {
 
 
   const [toolbarPosition, setToolbarPosition] = useState<Position>('top');
   const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
   const [focusLocation, setFocusLocation] = useState<Location>('editor');
-  // const focusLocationRef = useRef<'title' | 'subtitle' | 'editor' | null>('editor');
-  // const titleRef = useRef<HTMLInputElement>(null);
+
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setisItalic] = useState(false);
   const [isH1, setIsH1] = useState(false);
@@ -48,6 +48,9 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
   const [isModalUploadErrorOpen,setIsModaulUploadErrorOpen] = useState(false);
   const [uploadImageError,setUploadImageError] = useState('');
   
+  const suppressNextArrowUp = useRef(false);
+
+
   const editor = useEditor({
     extensions: [
       StarterKit,Image,Underline,Dropcursor,
@@ -97,12 +100,14 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
         });
 
         const title = titleRef.current?.value;
+        const subtitle = subtitleRef.current?.value;
 
-        localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title}));
+
+        localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title,subtitle}));
 
       },5000);
       
-  },[editor,titleRef]);
+  },[editor,titleRef,subtitleRef]);
 
 
   useEffect(() => {
@@ -260,14 +265,17 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
             selection.$from.parent === firstNode &&
             selection.$from.parentOffset === 0;
   
+
           if (isAtStartOfFirstNode) {
             e.preventDefault();
-            titleRef.current?.focus();
+            suppressNextArrowUp.current = true;
+            console.log("aqui",subtitleRef);
+            subtitleRef.current?.focus();
           }
         }
       }}
     />
-  ), [editor,titleRef]);
+  ), [editor,subtitleRef]);
 
   const triggerAddImage = useCallback(() => {
     // Instead of prompt, trigger the hidden file input
@@ -284,14 +292,38 @@ export default function EditorWrapper({editorRef,titleRef,} : Props) {
         toolbarPosition={toolbarPosition} key={'super-cool-toolbar'} isBold = {isBold} isItalic = {isItalic} isH1 = {isH1} isH2 = {isH2} isStrike = {isStrike}
         isUnderline = {isUnderline}
       />
-      <input ref = {titleRef} className = "article-title" placeholder = "Your title" 
+      <input ref = {titleRef} className = "article-title" placeholder = "The title" 
       onFocus={() => {
         setFocusLocation("title")
       }}
       onKeyDown={(e) => {
         if (e.key === 'ArrowDown' || e.key === "Enter") {
           e.preventDefault();
+          // editor?.commands.focus('start');
+          subtitleRef.current?.focus();
+        }
+      }}
+
+      ></input>
+      <input ref = {subtitleRef} className = "article-subtitle" placeholder = "The subtitle" 
+      onFocus={() => {
+        setFocusLocation("subtitle")
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowDown' || e.key === "Enter") {
+          e.preventDefault();
           editor?.commands.focus('start');
+        }
+      }}
+      onKeyUp={(e)=>{
+        if(e.key === 'ArrowUp'){
+          e.preventDefault();
+          if (suppressNextArrowUp.current) {
+            suppressNextArrowUp.current = false;
+            return;
+          }
+          console.log("aqui também",document.activeElement);
+          titleRef.current?.focus();
         }
       }}
 

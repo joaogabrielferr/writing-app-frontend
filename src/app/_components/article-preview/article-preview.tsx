@@ -20,7 +20,7 @@ export default function ArticlePreview({article} : props) : JSX.Element{
                     <div className = {style.container}>
                         <div className = {style.info}>
                             <h2 className={style.title}>{article.title}</h2>
-                            <div className={style.subtitle}>{article.firstParagraph}</div>
+                            <div className={style.subtitle}> {article.subtitle ? article.subtitle : article.firstParagraph}</div>
                         </div>
                         <div className={style.img}>
                             {

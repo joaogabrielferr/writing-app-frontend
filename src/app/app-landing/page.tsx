@@ -17,24 +17,26 @@ export default function LandingPage(){
 
       <main className={styles.container}>
         <div className={styles.contentWrapper}>
-          <h1 className={styles.title}>
-            <span className={styles.titleFirstLetter}>E</span>SCRITR
-          </h1>
+          <div className = {styles.hero}>
+            <h1 className={styles.title}>
+              <span className={styles.titleFirstLetter}>E</span>SCRITR
+            </h1>
 
-          <p className={styles.slogan}>
-            Ignite Your Narrative. Built for the modern storyteller.
-          </p>
+            <p className={styles.slogan}>
+              Ignite Your Narrative. Built for the modern storyteller.
+            </p>
 
-          {/* <p className={styles.cta}>
-            Tired of clunky tools? ESCRITR is the sleek, intuitive platform built for the modern storyteller.
-            Unleash your creativity and let your ideas flow like never before.
-          </p> */}
+            {/* <p className={styles.cta}>
+              Tired of clunky tools? ESCRITR is the sleek, intuitive platform built for the modern storyteller.
+              Unleash your creativity and let your ideas flow like never before.
+            </p> */}
 
-          <Link href="/login" legacyBehavior>
-            <a className={styles.loginButton}>
-              Join the club ✨
-            </a>
-          </Link>
+            <Link href="/register" legacyBehavior>
+              <a className={styles.loginButton}>
+                Join the club ✨
+              </a>
+            </Link>
+          </div>
         </div>
       </main>
     </>

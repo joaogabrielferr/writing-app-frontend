@@ -91,7 +91,7 @@ api.interceptors.response.use(
         isRefreshing = false;
         return api(originalRequest);
       } catch (refreshError) {
-        console.error('Interceptor: Refresh token failed:', refreshError);
+        // console.error('Interceptor: Refresh token failed:', refreshError);
         processQueue(refreshError as AxiosError, null);
         isRefreshing = false;
         await authContextRef.logout();

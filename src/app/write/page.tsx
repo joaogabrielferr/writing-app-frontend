@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Editor } from '@tiptap/react'
 import Header from "../_components/header/header";
 import EditorWrapper from "../_components/editor/editor-wrapper";
@@ -23,6 +23,12 @@ interface Preview{
   authorUsername:string;
 }
 
+interface Draft{
+  content:string;
+  title:string;
+  subtitle:string;
+}
+
 export default function WritePage(){
 
     const router = useRouter();
@@ -31,6 +37,7 @@ export default function WritePage(){
 
     const editorRef = useRef<Editor | null>(null);
     const titleRef = useRef<HTMLInputElement | null>(null);
+    const subtitleRef = useRef<HTMLInputElement | null>(null);
     const [imagesUploaded,setImagesUploaded] = useState<string[]>([]);
 
     const [loading,setLoading] = useState(false);
@@ -43,6 +50,22 @@ export default function WritePage(){
     if(!AuthIsLoading && !isAuthenticated && router){
         router.replace("/login");
     }
+
+    useEffect(()=>{
+
+      const data = localStorage.getItem(DRAFT_LOCAL_STORAGE_KEY);
+      if(!data)return;
+
+      const draft = JSON.parse(data) as Draft;
+
+      if(!editorRef?.current || !titleRef?.current || !subtitleRef?.current)return;
+
+      editorRef?.current?.commands.setContent(draft.content || "");
+      titleRef.current.value = draft.title || "";
+      subtitleRef.current.value = draft.subtitle || "";
+
+
+    },[]);
 
     function handleAction(){
       console.log("aqui");
@@ -70,7 +93,8 @@ export default function WritePage(){
 
     function publish(){
       let content = editorRef.current?.getHTML();
-      const title = titleRef.current?.value;
+      const title = titleRef.current?.value || '';
+      const subtitle = subtitleRef.current?.value || '';
 
       const images: string[] = [];
       editorRef.current?.state.doc.descendants((node) => {
@@ -79,7 +103,7 @@ export default function WritePage(){
         }
       });
 
-     localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title}));
+     localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title,subtitle} as Draft));
 
 
      //images uploaded but removed later by user
@@ -98,11 +122,18 @@ export default function WritePage(){
         setErrorMessage("The title can't be empty!");
         return;
       }
-      
+
+      if(!content || content == "" || content == "<p></p>"){
+        setIsErrorModalOpen(true);
+        setErrorMessage("Write something before publishing!");
+        return;
+      }
+
       //replace "" with '' to send via json
       content = content?.replaceAll("(?<=\\s\\w+)=\\\"([^\\\"]*)\\\"", "='$1'");
       const article  = {
         title,
+        subtitle,
         content,
         thumbnailUrl: images?.[0] || null,
         authorUsername:"gabriel"
@@ -129,7 +160,7 @@ export default function WritePage(){
     return (
         <div>
             <Header location="editor" publish={publish}/>
-            <EditorWrapper editorRef = {editorRef} titleRef={titleRef}/>
+            <EditorWrapper editorRef = {editorRef} titleRef={titleRef} subtitleRef={subtitleRef}/>
           {loading && <FullscreenLoader text="Publishing your article..." />}
           <Modal
             isOpen={isErrorModalOpen}

@@ -1,13 +1,13 @@
 
 .pageEditor{
-  width: 99vw;
+  width: 98vw;
 }
 
 .editorContainer {
   margin: 0 auto;
   width: 900px;
   padding-bottom: 100px; // space for toolbar
-  margin-top: 70px;
+  margin-top: 140px;
   margin-bottom:200px;
 }
 
@@ -315,5 +315,11 @@
 @media (max-width: 940px) {
   .editorContainer, .toolbar {
     width: 95%;
+  }
+}
+
+@media (max-width: 720px){
+  .pageEditor{
+    width: 97%;
   }
 }

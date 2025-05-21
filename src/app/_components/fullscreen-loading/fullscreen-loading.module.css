@@ -1,9 +1,4 @@
-:root {
-    --background: #181818;
-    --foreground: #d1d1d1;
-    --purple: #696be7;
-  }
-  
+
   .loaderContainer {
     position: fixed;
     top: 0;
