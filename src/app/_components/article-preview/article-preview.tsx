@@ -22,11 +22,17 @@ export default function ArticlePreview({article} : props) : JSX.Element{
                             <h2 className={style.title}>{article.title}</h2>
                             <div className={style.subtitle}> {article.subtitle ? article.subtitle : article.firstParagraph}</div>
                         </div>
-                        <div className={style.img}>
-                            {
-                                article.thumbnailUrl && <img alt = "image" src = {article.thumbnailUrl}></img>
-                            }
-                        </div>
+                        {
+                            article.thumbnailUrl ?
+                            (
+                            <div className={style.img}>
+                                {
+                                    article.thumbnailUrl && <img alt = "image" src = {article.thumbnailUrl}></img>
+                                }
+                            </div>
+                            )
+                            :null
+                        }
 
                     </div>
                     <div className = {style.actions}>

@@ -41,7 +41,7 @@ export default function ArticlesList({articles} : Props){
                 }            
             </div>
             <div className = {style.load_more}>
-                <Button text="Load More" click={()=>console.log(".")} />
+                <Button click={()=>console.log(".")}>Load more</Button>
             </div>
         </div>
     );

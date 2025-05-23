@@ -1,71 +1,111 @@
 'use client'
 
-import { Bookmark, House, Pen, Search, ShieldCheck, Users } from "lucide-react";
+import { Bookmark, House, Search, ShieldCheck, User, Users } from "lucide-react";
 import style from "./sidebar.module.css";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import Button from "../button/button";
+import { useSidebar } from "@/context/sidebar-context";
+import { ReactNode } from "react";
+import { useUser } from "@/context/auth-context";
 
 export default function Sidebar(){
     const path = usePathname();
-    const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
+    
+    const {user,isAuthenticated} = useUser();
 
-    useEffect(()=>{
-        function adjust(){
-          setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1250);
-        }
+    // const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1200);
 
-        window.addEventListener("resize",adjust);
+    // useEffect(()=>{
+    //     function adjust(){
+    //       setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1200);
+    //     }
+
+    //     window.addEventListener("resize",adjust);
 
     
-        return () =>{
-          window.removeEventListener("resize",adjust);
-        }
+    //     return () =>{
+    //       window.removeEventListener("resize",adjust);
+    //     }
     
-      },[]);
-    console.log(path);
+    //   },[]);
+
     const a : number[]= [];
     for(let i = 0;i<20;i++)a.push(i);
     return (
-        <aside className = {style.aside}>
-            <div className = {style.content}>
-                <div className = {style.buttons}>
-                    <button className = {`${style.button} ${path === '/' ? style.selected : ''}`}>
-                        <span><House /></span>
-                        {!isMobile && <span>Home</span>
-                        }
-                    </button>
-                    <button className = {`${style.button} ${path === '/premium' ? style.selected : ''}`}>
-                        <span><ShieldCheck /></span>
-                        {!isMobile && <span>Premium</span>
-                        }
-                    </button>
-                    <button className = {`${style.button} ${path === '/bookmarks' ? style.selected : ''}`}>
-                        <span><Bookmark /></span>
-                        {!isMobile && <span>Bookmarks</span>
-                        }
-                    </button>
-                    <button className = {`${style.button} ${path === '/search' ? style.selected : ''}`}>
-                        <span><Search /></span>
-                        {!isMobile && <span>Search</span>
-                        }
-                    </button>
-                    <button className = {`${style.button} ${path === '/communities' ? style.selected : ''}`}>
-                        <span><Users /></span>
-                        {!isMobile && <span>Communities</span>
-                        }
-                    </button>
-                    <Link href = {"/write"}  className = {`${style.button} ${path === '/write' ? style.selected : ''}`}>
-                            <span><Pen /></span>
-                            {!isMobile && <span>Write</span>
-                            }
-                    </Link>
-                </div>
+        <SidebarShell>
+            <div className = {style.buttons}>
+                <button className = {`${style.button} ${path === '/' ? style.selected : ''}`}>
+                    <span><House /></span>
+                    <span>Home</span>
+                </button>
+                <button className = {`${style.button} ${path === '/premium' ? style.selected : ''}`}>
+                    <span><ShieldCheck /></span>
+                    <span>Premium</span>
+                </button>
+                <button className = {`${style.button} ${path === '/bookmarks' ? style.selected : ''}`}>
+                    <span><Bookmark /></span>
+                    <span>Bookmarks</span>
+                </button>
+                <button className = {`${style.button} ${path === '/search' ? style.selected : ''}`}>
+                    <span><Search /></span>
+                    <span>Search</span>
+                </button>
+                <button className = {`${style.button} ${path === '/communities' ? style.selected : ''}`}>
+                    <span><Users /></span>
+                    <span>Communities</span>
+                </button>
                 {
-                    a.map((i,idx) => <div key = {i + idx} className = {style.skeleton_preview}></div>)
+                    isAuthenticated && user?.username &&
+                    (
+                        <Link href={`/${user.username}`}>
+                        <button className = {`${style.button} ${path === `/${user.username}` ? style.selected : ''}`}>
+                            <span><User /></span>
+                            <span>Profile</span>
+                        </button>
+                        </Link>
+                    )
                 }
+                <Link href = {"/write"}>
+                        <Button customStyle={{width:"100%",paddingTop:"1.2rem",paddingBottom:"1.2rem",marginTop:"20px"}}>Write</Button>
+                </Link>
             </div>
-        </aside>
+            {/* {
+
+                    a.map((i,idx) => <div key = {i + idx} className = {style.skeleton_preview}></div>)
+                } */}
+            </SidebarShell>
     );
+
+}
+
+function SidebarShell({children}:{children:ReactNode}){
+
+    const {isSidebarMobile,isToggleVisible} = useSidebar();
+
+    const showMobileSidebar = isSidebarMobile && isToggleVisible;
+    const showNormalSidebar = !isSidebarMobile;
+
+    if(showNormalSidebar){
+        return (
+            <aside className = {style.aside}>
+                <div className = {style.content}>
+                    {children}
+                </div>
+                </aside>
+        );
+    }else if(showMobileSidebar){
+        return (
+            <aside className = {style.sidebarMobile}>
+                <div className = {style.content}>
+                    {children}
+                </div>
+                </aside>
+        )
+    }
+
+    return null;
+
+
 
 }

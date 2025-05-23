@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 // --- Constants ---
 const MIN_PASSWORD_LENGTH = 6;
-const MAX_PASSWORD_LENGTH = 20;
+const MAX_PASSWORD_LENGTH = 50;
 const MIN_USERNAME_LENGTH = 3;
 const MAX_USERNAME_LENGTH = 30;
 

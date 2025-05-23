@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {  Geist } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/auth-context";
+import { SidebarProvider } from "@/context/sidebar-context";
 
 
 const geistSans = Geist({
@@ -34,11 +35,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={geistSans.className}>
         <AuthProvider>
-          <div className = "global-container">
-            <div className = "whole-content">
-              {children}  
+          <SidebarProvider>
+            <div className = "global-container">
+              <div className = "whole-content">
+                {children}  
+              </div>
             </div>
-          </div>
+          </SidebarProvider>
         </AuthProvider>
       </body>
     </html>

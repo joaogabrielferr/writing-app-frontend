@@ -1,23 +1,41 @@
 .aside {
-  width: 300px;
+  width: 270px;
   position: fixed;
-  top: 70px;
+  top: 60px;
   left: 10px;
-  /* border-right: 1px solid rgb(78, 78, 78); */
-  /* background-color: rgb(0, 0, 0); */
-  /* background-color: #0a0a0a; */
-  height: calc(100vh - 90px);
-  overflow-y: auto; /* Keep the scrollbar space */
-  /* transition: all 0.3s ease-in-out; */
-  padding-right: 10px; /* Reserves space for scrollbar */
+  border-right: 1px solid rgb(78, 78, 78);
+  height: calc(100vh - 60px);
+  overflow-y: auto; 
+  padding-right: 10px; 
 
-  /* Make scrollbar space reserved but invisible */
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: transparent transparent; /* Hide scrollbar by default */
-  border-radius: 10px;
+  scrollbar-width: thin; 
+  scrollbar-color: transparent transparent; 
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+.sidebarMobile{
+  width: 270px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  border-right: 1px solid rgb(78, 78, 78);
+  height: calc(100vh - 60px);
+  overflow-y: auto; 
+  padding-right: 10px; 
+  z-index: 2000;
+  scrollbar-width: thin; 
+  scrollbar-color: transparent transparent; 
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: var(--background);
+
+  }
+
+.hide{
+  display: none;
 }
 
 /* Content inside sidebar */
@@ -41,20 +59,41 @@
   border: none;
   color: var(--foreground);
   padding: 0.5rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  border-radius: 25px;
+  /* font-weight: 600; */
+  font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
   width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.write{
+  margin-top: 40px;
+  background-color: var(--purple);
+  border: none;
+  color: var(--foreground);
+  padding: 0.5rem 1.25rem;
+  border-radius: 25px;
+  /* font-weight: 600; */
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  
 }
 
 .selected{
-  background-color: #3d3d3d;
+  /* background-color: #3d3d3d; */
+  color: white;
 }
 
 .button:hover{
@@ -101,33 +140,4 @@
   border-radius: 3px;
 }
 
-@media (max-width: 1200px) {
-  .aside {
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 50px;
-    flex-direction: row;
-    padding: 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    justify-content: space-around;
-    align-items: center;
-    border-top: 1px solid #444;
-    background-color: #0a0a0a; 
-    z-index: 1000;
-  }
-
-  .content {
-    width: auto;
-    margin: 0 10px;
-    display: flex;
-    align-items: center;
-  }
-
-  .buttons{
-    display: flex;
-  }
-}
+  

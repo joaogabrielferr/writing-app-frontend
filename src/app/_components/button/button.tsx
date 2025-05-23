@@ -1,35 +1,37 @@
 import Link from 'next/link';
 import style from './button.module.css';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { LucideIcon } from 'lucide-react';
 
-
 interface Props{
-    text?:string;
     link?:string;
     fontColor?:string;
     bgColor?:string;
+    border?:string;
     click?:() => void;
     Icon?: LucideIcon;
+    customStyle?:{[key:string]:string},
+    children:React.ReactNode | undefined;
 }
 
-export default function Button({text,link,click,fontColor,bgColor,Icon} : Props){
-    const customStyle = {
+export default function Button({link,click,fontColor,bgColor,Icon,children,border,customStyle} : PropsWithChildren<Props>){
+    const commonConfig = {
         color: fontColor === "purple" ? 'var(--purple)' : fontColor,
-        backgroundColor:bgColor === "purple" ? 'var(--purple)' : bgColor
+        backgroundColor: bgColor === "purple" ? 'var(--purple)' : bgColor,
+        border: border ? `1px solid ${border === "purple" ? 'var(--purple)' : border}` : 'none'
     };
 
     if(link){
         return <button className = {style.button}>
             <Link href={link}>{Icon && <Icon/>}
-            {text ? text : ''}</Link>
+            {children}</Link>
         </button>
     }
 
     return <button 
     className={style.button}
      onClick={click || undefined}
-     style={customStyle}
-     >{Icon && <Icon size={16} />}{text}</button>
+     style={commonConfig && customStyle}
+     >{Icon && <Icon size={16} />}{children}</button>
 
 }

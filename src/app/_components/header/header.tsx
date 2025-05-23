@@ -7,7 +7,8 @@ import Button from "../button/button";
 import { useEffect, useRef, useState } from "react";
 import SearchBar from "../search-bar/search-bar";
 import { useUser } from "@/context/auth-context";
-import { LogOut, User } from "lucide-react";
+import { LogOut, Menu, Pen, User } from "lucide-react";
+import { useSidebar } from "@/context/sidebar-context";
 
 interface Props{
     location: 'main' | 'editor' | 'other'
@@ -18,6 +19,8 @@ export default function Header({location,publish} : Props){
 
     const {user,isAuthenticated,logout,isLoading} = useUser();
     
+    const {isSidebarMobile,isToggleVisible,setIsToggleVisible} = useSidebar();
+
     console.log(location);
     const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
 
@@ -49,12 +52,22 @@ export default function Header({location,publish} : Props){
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const toggleSidebar = () =>{
+    setIsToggleVisible(prev=> !prev);
+  }
     
 
     return (
         <header id = "header" className = {`${style.header} ${(location !== 'editor') ? style.border : ''}`}>
             <div className = {style.inner_header}>
                 <div className = {style.logo_container}>
+                    {
+                        isSidebarMobile &&
+                                            <button className = {style.icon} onClick={toggleSidebar}>
+                                                <Menu size={30}/>
+                                            </button>
+                    }
                     <Link href="/" className = {style.logo}>
                         <span>E</span>
                         SCRITR
@@ -65,21 +78,27 @@ export default function Header({location,publish} : Props){
                 } */}
                 <div className = {style.right}>
                     {
-                        ((location === 'main'  || location === 'other') && isAuthenticated) && <Button text={"Write"} link="/write" />
+                        ((location === 'main'  || location === 'other') && isAuthenticated) && <Button link="/write"><Pen size = {14}/> Write</Button>
                     }
                     {
-                        (location === 'editor' && isAuthenticated) && <Button text = {'Publish'} click={publish} />
+                        (location === 'editor' && isAuthenticated) && <Button click={publish}>Publish</Button>
                     }
 
                     {
                         isLoading ? <>loading</> : (
                                 <>
                                     {
-                                        !isAuthenticated ? <Link href={"/register"}><Button bgColor="purple" fontColor="white" text = "Sign up"/></Link> : null
+                                        !isAuthenticated ?
+                                        (
+                                            <>
+                                                <Link href={"/write"}><Button><Pen size = {14}/> Write</Button></Link>
+                                                <Link href={"/register"}><Button>Sign up</Button></Link>
+                                                <Link href={"/login"}><Button bgColor="transparent" border="purple">Sign in</Button></Link>
+                                            </>
+                                        )
+                                         : null
                                     }
-                                    {
-                                        !isAuthenticated ? <Link href={"/login"}><Button text = "Sign in"/></Link> : null
-                                    }
+                                   
                                 </>
                         )
                     }
@@ -89,6 +108,9 @@ export default function Header({location,publish} : Props){
 
                     
                     <div className = {style.avatarContainer} ref={menuRef}>
+                        {
+                            isLoading ? <div className = {style.avatarPlaceholder}></div> : null
+                        }
                         {user?.id ?
                             
                             (
@@ -101,7 +123,7 @@ export default function Header({location,publish} : Props){
                                  : <div onClick={() => setOpen(prev => !prev)} className = {style.avatar_no_picture}>{user?.username?.[0]?.toLocaleUpperCase()}</div>
 
                             )
-                            : <div className = {style.avatarPlaceholder}></div>
+                            : null
                         }
                         {(open && isAuthenticated) && (
                         <div className={style.dropdown}>

@@ -8,6 +8,8 @@ interface AuthContextForInterceptor {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const LOGIN_PATH = '/auth/login';
+const REFRESH_PATH = '/auth/refresh';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -26,7 +28,9 @@ api.interceptors.request.use(
     if (authContextRef) {
       const token = authContextRef.getAccessToken();
       if (token && config.headers) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+        if(config.url !== REFRESH_PATH){
+          config.headers['Authorization'] = `Bearer ${token}`;
+        }
       }
     }
     return config;
@@ -53,8 +57,19 @@ api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const isAuthEndpoint = originalRequest.url?.endsWith(LOGIN_PATH) || originalRequest.url?.endsWith(REFRESH_PATH);
+    
+    const errorResponseData = error.response?.data as { message?: string; asset?:string; errorCode?: string;} | undefined;
 
-    if (error.response?.status === 401 && !originalRequest._retry && authContextRef) {
+    // Check if the 401 is due to invalid credentials explicitly from backend
+    const isInvalidCredentialsError = errorResponseData?.errorCode === 'INVALID_CREDENTIALS';
+    
+    if (error.response?.status === 401 && 
+      !originalRequest._retry && 
+      authContextRef &&
+      !isAuthEndpoint &&
+      !isInvalidCredentialsError
+    ) {
       if (isRefreshing) {
         // If already refreshing, add new request to a queue
         return new Promise((resolve, reject) => {

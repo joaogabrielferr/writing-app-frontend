@@ -13,6 +13,7 @@ import { FullscreenLoader } from "../_components/fullscreen-loading/fullscreen-l
 import { Article } from "@/models/article";
 import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
 import api from "@/lib/api";
+import Shell from "../_components/shell/shell";
 export default function Feed() {
 
     const [articles,setArticles] = useState<Article[]>([]);
@@ -45,11 +46,7 @@ export default function Feed() {
   if(isAuthenticated){
       return (
         <>
-        <Header location="main"/>
-          <div className = {styles.mainPageHome}>
-            <Sidebar></Sidebar>
-            <div className = {styles.mainPageMainContainer}>
-                <main className = {styles.mainPageMain}>
+            <Shell>
                   {/* <div id = "__banner__">
                     content
                   </div> */}
@@ -70,10 +67,9 @@ export default function Feed() {
                     <SecondarySidebar></SecondarySidebar>
                   </section>
     
-                </main>
-            </div>
-          </div>
-        </>
+            </Shell>
+          </>
+
       );
   }
 
