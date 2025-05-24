@@ -94,7 +94,7 @@ export default function UserProfilePage(){
                             (
                                 error ? <div>We couldn&apos;t load the articles. Please try again later.</div> 
                                 : articles?.map(a=>{
-                                    return <ArticlePreview article={a} key={a.id}></ArticlePreview>
+                                    return <ArticlePreview isUser = {username === user?.username} article={a} key={a.id}></ArticlePreview>
                                 })
                             )
                         }

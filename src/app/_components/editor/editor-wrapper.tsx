@@ -1,17 +1,12 @@
 'use client'
 
-import { useEditor, EditorContent, Editor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
-import Placeholder from '@tiptap/extension-placeholder'
-import { Dispatch, memo, RefObject, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {EditorContent, Editor } from '@tiptap/react'
+
+import { Dispatch, memo, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import "./editor-wrapper.scss";
 import { Bold, Heading1, Heading2, ImagePlus, Italic, List, PanelBottomClose, PanelLeftClose, PanelRightClose, PanelTopClose, Strikethrough } from 'lucide-react'
 import {Underline as UnderlineIcon} from 'lucide-react';
-import { LastParagraphMarker } from '@/app/_components/editor/extension';
-import Underline from '@tiptap/extension-underline';
-import Dropcursor from '@tiptap/extension-dropcursor';
-import { ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY, DRAFT_LOCAL_STORAGE_KEY } from '@/global-variables';
+import { ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY } from '@/global-variables';
 import api from '@/lib/api'
 import Modal from '../modal/modal'
 import axios from 'axios'
@@ -20,16 +15,18 @@ import { FullscreenLoader } from '../fullscreen-loading/fullscreen-loading'
 
 type Props = {
   initialContent?: string
-  editorRef: RefObject<Editor | null>
-  titleRef:  RefObject<HTMLInputElement | null>;
-  subtitleRef:  RefObject<HTMLInputElement | null>;
+  editor: Editor | null;
+  onTitleChange: (newTitle: string) => void;
+  onSubtitleChange: (newSubtitle: string) => void;
+  title: string;
+  subtitle:string;
 }
 
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
 type Location = 'title' | 'subtitle' | 'editor' | null;
 
-export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) {
+export default function EditorWrapper({editor,onTitleChange,onSubtitleChange,title,subtitle} : Props) {
 
 
   const [toolbarPosition, setToolbarPosition] = useState<Position>('top');
@@ -50,27 +47,9 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
   
   const suppressNextArrowUp = useRef(false);
 
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit,Image,Underline,Dropcursor,
-      LastParagraphMarker,
-      Placeholder.configure({
-        placeholder: 'Write something ...',
-      }),
-    ],
-    // onUpdate({ editor }) {
-    //   const html = editor.getHTML();
-    //   console.log(html);
-    //   onChange?.(html);
-    // },
-    onCreate({ editor }) {
-      editor.commands.focus('start')
-    },
-    immediatelyRender:false,
-  });
-
-
+  const localTitleRef = useRef<HTMLInputElement>(null); //needed for focusing
+  const localSubtitleRef = useRef<HTMLInputElement>(null);
+  
   useEffect(() => {
     if (!editor) return;
     
@@ -86,35 +65,6 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
   
   }, [editor]);
 
-  useEffect(()=>{
-    if (!editor) return;
-
-      setInterval(()=>{
-        
-        const content = editor?.getHTML();
-        const images:string[] = [];
-        editor.state.doc.descendants((node) => {
-          if (node.type.name === 'image' && node.attrs.src) {
-            images.push(node.attrs.src);
-          }
-        });
-
-        const title = titleRef.current?.value;
-        const subtitle = subtitleRef.current?.value;
-
-
-        localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title,subtitle}));
-
-      },5000);
-      
-  },[editor,titleRef,subtitleRef]);
-
-
-  useEffect(() => {
-    if (editor) {
-      editorRef.current = editor;
-    }
-  }, [editor, editorRef]);
 
   useEffect(()=>{
     function adjust(){
@@ -176,12 +126,6 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
       setToolbarPosition('bottom');
     }
   },[isMobile]);
-
-
-  // useEffect(()=>{
-  //   editor?.commands.focus('start');
-  // },[editor]);
-
 
 
   const addImage = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -269,13 +213,13 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
           if (isAtStartOfFirstNode) {
             e.preventDefault();
             suppressNextArrowUp.current = true;
-            console.log("aqui",subtitleRef);
-            subtitleRef.current?.focus();
+            console.log("aqui",localSubtitleRef);
+            localSubtitleRef.current?.focus();
           }
         }
       }}
     />
-  ), [editor,subtitleRef]);
+  ), [editor]);
 
   const triggerAddImage = useCallback(() => {
     // Instead of prompt, trigger the hidden file input
@@ -292,7 +236,9 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
         toolbarPosition={toolbarPosition} key={'super-cool-toolbar'} isBold = {isBold} isItalic = {isItalic} isH1 = {isH1} isH2 = {isH2} isStrike = {isStrike}
         isUnderline = {isUnderline}
       />
-      <input ref = {titleRef} className = "article-title" placeholder = "The title" 
+      <input ref = {localTitleRef} className = "article-title" placeholder = "The title"
+      onChange={(e)=>onTitleChange(e.target.value)}
+      value={title}
       onFocus={() => {
         setFocusLocation("title")
       }}
@@ -300,12 +246,14 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
         if (e.key === 'ArrowDown' || e.key === "Enter") {
           e.preventDefault();
           // editor?.commands.focus('start');
-          subtitleRef.current?.focus();
+          localSubtitleRef.current?.focus();
         }
       }}
 
       ></input>
-      <input ref = {subtitleRef} className = "article-subtitle" placeholder = "The subtitle" 
+      <input ref = {localSubtitleRef} className = "article-subtitle" placeholder = "The subtitle"
+      onChange={(e)=>onSubtitleChange(e.target.value)}
+      value = {subtitle}
       onFocus={() => {
         setFocusLocation("subtitle")
       }}
@@ -323,7 +271,7 @@ export default function EditorWrapper({editorRef,titleRef,subtitleRef} : Props) 
             return;
           }
           console.log("aqui também",document.activeElement);
-          titleRef.current?.focus();
+          localTitleRef.current?.focus();
         }
       }}
 

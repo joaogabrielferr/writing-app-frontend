@@ -11,8 +11,8 @@
 
 .mainPageSection {
   display: grid;
-  grid-template-columns: 800px 1fr;
-  gap: 80px;
+  grid-template-columns: 1fr 380px;
+  /* gap: 80px; */
   margin-top: 20px;
 }
 

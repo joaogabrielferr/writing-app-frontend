@@ -2,24 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { useEditor } from '@tiptap/react'
-import Header from "../_components/header/header";
-import EditorWrapper from "../_components/editor/editor-wrapper";
-import Modal from "../_components/modal/modal";
-import { FullscreenLoader } from "../_components/fullscreen-loading/fullscreen-loading";
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import { Pen } from "lucide-react";
 import api from "@/lib/api";
 import { useUser } from "@/context/auth-context";
-import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
 import { ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY, DRAFT_LOCAL_STORAGE_KEY } from "@/global-variables";
+import { Article } from "@/models/article";
+import SplashScreenOverlay from "@/app/_components/splash-screen/splash-screen";
+import Header from "@/app/_components/header/header";
+import EditorWrapper from "@/app/_components/editor/editor-wrapper";
+import { FullscreenLoader } from "@/app/_components/fullscreen-loading/fullscreen-loading";
+import Modal from "@/app/_components/modal/modal";
 import StarterKit from "@tiptap/starter-kit";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import { LastParagraphMarker } from "@/app/_components/editor/extension";
+import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
-import Dropcursor from "@tiptap/extension-dropcursor";
-import { LastParagraphMarker } from "../_components/editor/extension";
-import Placeholder from "@tiptap/extension-placeholder";
-import { debounce } from "lodash";
 
 interface Preview{
   title:string,
@@ -36,25 +36,30 @@ interface Draft{
   subtitle:string;
 }
 
-export default function WritePage(){
+
+export default function EditPage(){
 
     const router = useRouter();
+    const params = useParams();
+    const article_id = params?.article_id;
 
     const {isLoading: AuthIsLoading,isAuthenticated,user} = useUser();
 
+    const [title, setTitle] = useState('');
+    const [subtitle, setSubtitle] = useState('');
+
     const [imagesUploaded,setImagesUploaded] = useState<string[]>([]);
 
-    const [loading,setLoading] = useState(false);
+    const [saving,setSaving] = useState(false);
     const [isErrorModalOpen,setIsErrorModalOpen] = useState(false);
     const [errorMessage,setErrorMessage] = useState("");
     const [preview,setPreview] = useState<Preview>();
 
     const [isPreviewModalOpen,setIsPreviewModalOpen] = useState(false);
 
-    const [draftInitialized,setDraftInitialized] = useState(false);
+    const [loaded,setLoaded] = useState(false);
 
-    const [title, setTitle] = useState('');
-    const [subtitle, setSubtitle] = useState('');
+    const [definedUser,setDefinedUser] = useState(false);
 
     const editor = useEditor({
         extensions: [
@@ -64,68 +69,81 @@ export default function WritePage(){
             placeholder: 'Write something ...',
           }),
         ],
+        onCreate({ editor }) {
+          editor.commands.focus('start')
+        },
         immediatelyRender:false,
       });
+
+
 
     if(!AuthIsLoading && !isAuthenticated && router){
         router.replace("/login");
     }
 
+
     useEffect(()=>{
-      const data = localStorage.getItem(DRAFT_LOCAL_STORAGE_KEY);
-      if(!data)return;
+    
+      const loadArticle = async () =>{
+            console.log("USER:",user);
+            try{
+                const response = await api.get(`/articles/${article_id}`);
+                const article = response.data as Article;
+                console.log(article.author.username,user?.username);
+                if(article.author.username !== user?.username){
+                    console.log("aqui ?");
+                    router.replace("/");
+                }else{
+                    setDefinedUser(true);
+                }
+                console.log("aqui!!!!!!!");
+                editor?.commands.setContent(article.content || "");
+                setTitle(article.title || "");
+                setSubtitle(article.subtitle || "");
 
-      const draft = JSON.parse(data) as Draft;
-
-
-      if(!editor || draftInitialized)return;
-
-      editor.commands.setContent(draft.content || "");
-      setTitle(draft.title || "");
-      setSubtitle(draft.subtitle || "");
-
-      setDraftInitialized(true);
-
-    },[editor,draftInitialized]);
-
-      useEffect(()=>{
-
-        const saveData = () =>{
-          if (!editor) return;
-      
-          const content = editor?.getHTML();
-          const images:string[] = [];
-          editor.state.doc.descendants((node) => {
-            if (node.type.name === 'image' && node.attrs.src) {
-              images.push(node.attrs.src);
+            }catch(err:unknown){
+                console.log(err);
+        
+            }finally{
+                setLoaded(true);
             }
-          });
+      }
+
+    console.log(AuthIsLoading || !isAuthenticated || !article_id);
+    
+    console.log({
+        AuthIsLoading,
+        isAuthenticated,
+        user,
+        article_id,
+        editor
+    });
+
+    if(!loaded  && !AuthIsLoading && isAuthenticated && user && article_id && editor){
+        loadArticle();
+    }
+
       
-  
-          localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title,subtitle}));          
 
-        }
 
-        const debouncedSave = debounce(saveData,5000);
+    //   const data = localStorage.getItem(DRAFT_LOCAL_STORAGE_KEY);
+    //   if(!data)return;
 
-        if(editor){
-          debouncedSave();
-        }
+    //   if(!editorRef?.current || !titleRef?.current || !subtitleRef?.current)return;
 
-        return () =>{
-          debouncedSave.cancel();
-        }
+    //   editorRef?.current?.commands.setContent(draft.content || "");
+    //   titleRef.current.value = draft.title || "";
+    //   subtitleRef.current.value = draft.subtitle || "";
 
-          
-      },[editor,title,subtitle]);
 
+    },[AuthIsLoading,isAuthenticated,article_id,loaded,user,router,editor]);
 
     function handleAction(){
       console.log("aqui");
       setIsPreviewModalOpen(false);
-      setLoading(true);
+      setSaving(true);
 
-      api.post("/articles",preview,{}).then(
+      api.put(`/articles/${article_id}`,preview,{}).then(
         (response)=>{
           console.log(response);
           setIsErrorModalOpen(false);
@@ -139,19 +157,20 @@ export default function WritePage(){
         setErrorMessage("There was a problem saving your article, please try again later. Don't worry, the draft is saved and you can access it later.");
         setIsErrorModalOpen(true);
       }).finally(()=>{
-        setLoading(false);
+        setSaving(false);
       });
 
     };
-
+    
     function publish(){
-      if (!editor) {
+    if (!editor) {
         console.error("Publish: Editor not available!");
         setErrorMessage("Editor is not ready. Please wait and try again.");
         setIsErrorModalOpen(true);
         return;
     }
       let content = editor.getHTML();
+
 
       const images: string[] = [];
       editor.state.doc.descendants((node) => {
@@ -195,7 +214,7 @@ export default function WritePage(){
         thumbnailUrl: images?.[0] || null,
         authorUsername:user?.username
       } as Preview;
-      console.log(article);
+
       setPreview(article);
 
       setIsPreviewModalOpen(true);
@@ -208,11 +227,13 @@ export default function WritePage(){
       setImagesUploaded([imagesUploaded[index],...imagesUploaded.filter((_,i) => i != index)]);
     }
 
-    if(AuthIsLoading || !isAuthenticated){
+    if(AuthIsLoading || !isAuthenticated || !definedUser || !editor){
 
-      return <SplashScreenOverlay/>
+      return  <SplashScreenOverlay/>;
 
+      
     }
+
 
     return (
         <div>
@@ -224,14 +245,14 @@ export default function WritePage(){
                 title={title}
                 subtitle={subtitle}
             />
-          {loading && <FullscreenLoader text="Publishing your article..." />}
+          {saving && <FullscreenLoader text="Publishing your article..." />}
           <Modal
             isOpen={isErrorModalOpen}
             onClose={() => setIsErrorModalOpen(false)}
             title="Error"
             size="medium"
             actionText="Close"
-            loading={loading}
+            loading={saving}
             showCancelButton={false}
             onAction={()=>setIsErrorModalOpen(false)}
           >
@@ -240,10 +261,10 @@ export default function WritePage(){
           <Modal
             isOpen={isPreviewModalOpen}
             onClose={()=>setIsPreviewModalOpen(false)}
-            title="You're about to publish your story!"
+            title="You're about edit your story"
             size="xlarge"
-            actionText="Publish"
-            loading={loading}
+            actionText="Edit"
+            loading={saving}
             showCancelButton={true}
             onAction={handleAction}
           >
@@ -276,7 +297,6 @@ function MyPreview({preview,imagesUploaded,changeImage} : {preview:Preview, imag
         <p>The thumbnail is the image that appears alongside the title of your story in the homepage.</p>
         {imagesUploaded?.length ? <button onClick={()=>setIsOpen(true)} className = {styles.button}>Edit thumbnail<>&nbsp;</><Pen size={16}/></button> : null}
         {preview?.thumbnailUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview!.thumbnailUrl}
             alt="Preview"

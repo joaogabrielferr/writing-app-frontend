@@ -1,7 +1,7 @@
 .aside {
   position: relative;
   /* background-color: #525252; */
-  width: 320px;
+  width: 100%;
   
 }
 
@@ -9,22 +9,20 @@
   border-radius: 10px;
   position: sticky;
   top: 60px;
-  /* height: calc(100vh - 80px);  */
   height: 500px;
   margin-left: 5px;
   overflow-y: auto; 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-right: 7px; /* Reserve space for the scrollbar */
-  /* border-left: 1px solid rgb(78, 78, 78); */
+  padding-right: 7px;
   background-color: #0e0e0e;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 
-  /* Make scrollbar space reserved but invisible */
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin; 
   scrollbar-color: transparent transparent;
   /* scrollbar-color: rgba(255, 255, 255, 0.5) transparent; */
+
   
 }
 

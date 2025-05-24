@@ -5,7 +5,6 @@ import Link from "next/link";
 import style from "./header.module.css";
 import Button from "../button/button";
 import { useEffect, useRef, useState } from "react";
-import SearchBar from "../search-bar/search-bar";
 import { useUser } from "@/context/auth-context";
 import { LogOut, Menu, Pen, User } from "lucide-react";
 import { useSidebar } from "@/context/sidebar-context";
@@ -19,26 +18,25 @@ export default function Header({location,publish} : Props){
 
     const {user,isAuthenticated,logout,isLoading} = useUser();
     
-    const {isSidebarMobile,isToggleVisible,setIsToggleVisible} = useSidebar();
+    const {isSidebarMobile,setIsToggleVisible} = useSidebar();
 
-    console.log(location);
-    const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
+    // const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1250);
 
       const [open, setOpen] = useState(false);
       const menuRef = useRef<HTMLDivElement>(null);
 
-    useEffect(()=>{
-        function adjust(){
-            setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1250);
+    // useEffect(()=>{
+    //     function adjust(){
+    //         setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1250);
             
-        }
-        window.addEventListener("resize",adjust);
+    //     }
+    //     window.addEventListener("resize",adjust);
     
-        return () =>{
-          window.removeEventListener("resize",adjust);
-        }
+    //     return () =>{
+    //       window.removeEventListener("resize",adjust);
+    //     }
     
-      },[location]);
+    //   },[location]);
     
 
 

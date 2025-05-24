@@ -1,6 +1,7 @@
 import Header from "@/app/_components/header/header";
 import style from './article-page.module.css'
 import { Article } from "@/models/article";
+import { notFound } from "next/navigation";
 
 export default async function ArticlePage({
     params,
@@ -9,11 +10,17 @@ export default async function ArticlePage({
   }){
 
     const {articleSlug} = await params;
-    console.log(articleSlug);
-    const data = await fetch(`http://localhost:8080/api/articles/slug/${articleSlug}`, {
+    console.log("slug:",articleSlug);
+    const res = await fetch(`http://localhost:8080/api/articles/slug/${articleSlug}`, {
       next: { revalidate: 3600 }, //TODO: revalidate only after article changes
-    })
-    const article : Article = await data.json();
+    });
+    
+    if(!res.ok){
+      notFound();
+    }
+
+    const article: Article = await res.json();
+
 
     return (
         <>

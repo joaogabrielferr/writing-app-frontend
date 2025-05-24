@@ -1,19 +1,62 @@
-import { JSX } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
 import style from './article-preview.module.css';
 import { Article } from "@/models/article";
 import Link from "next/link";
-import { Heart, MessageCircle } from "lucide-react";
+import { EllipsisVertical, Heart, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface props{
     article: Article;
+    isUser:boolean;
 }
 
-export default function ArticlePreview({article} : props) : JSX.Element{
+export default function ArticlePreview({article,isUser} : props) : JSX.Element{
+
+    const [dropdownOpen,setDropdownOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+    
+    const router = useRouter();
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setDropdownOpen(false);
+        }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const navigateToEdit = () =>{
+        router.push(`/edit/${article.id}`);
+    }
 
     return (
         <div className = {style.preview}>
             <div className={style.header}>
-                {article.author.name}
+                <div className = {style.innerHeader} ref={menuRef}>
+                    {
+                        isUser && (
+                        <button className = {style.buttonIcon} onClick={()=>setDropdownOpen(prev => !prev)}>
+                            <EllipsisVertical />
+                        </button>                            
+                        )
+                    }
+                    {
+                        (isUser && dropdownOpen) && (
+                        <div className={style.dropdown}>
+                            <button onClick={navigateToEdit} className={style.dropdownItem}>Edit</button>
+                            <button className={`${style.dropdownItem} ${style.danger}`}>Remove</button>
+                        </div>
+
+                        )
+                    }
+                    
+                </div>
+                {
+                    !isUser ? <div>@{article.author.username}</div> : null
+
+                }
                  {/* {!!article.community ? " for " + article.community.name : ''} */}
             </div>
                 <Link href={`${article.author.username}/${article.slug}`} className = {style.link}>
