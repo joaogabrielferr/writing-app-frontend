@@ -59,10 +59,9 @@ a {
 }
 
 .whole-content {
-  /* padding-top: 60px; */
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: 99vw;
 }
 
 @media (prefers-color-scheme: dark) {

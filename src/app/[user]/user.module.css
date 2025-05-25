@@ -10,15 +10,19 @@
 }
 
 .mainPageSection {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  /* gap: 80px; */
+  display: flex;
   margin-top: 20px;
+  width: 90%;
+  position: relative;
+  gap: 20px;
 }
 
 .left {
-  flex-grow: 1;
-  min-width: 0;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .right {

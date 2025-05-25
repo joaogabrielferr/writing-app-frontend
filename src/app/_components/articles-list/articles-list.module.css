@@ -1,6 +1,9 @@
 .articles_list{
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .load_more{

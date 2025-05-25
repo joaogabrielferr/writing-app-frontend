@@ -95,6 +95,7 @@ export default function ArticlePreview({article,isUser} : props) : JSX.Element{
 export function ArticlePreviewSkeleton(){
     return (
         <div className = {style.previewSkeleton}>
+           teste
         </div>
     );
     

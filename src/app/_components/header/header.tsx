@@ -10,7 +10,7 @@ import { LogOut, Menu, Pen, User } from "lucide-react";
 import { useSidebar } from "@/context/sidebar-context";
 
 interface Props{
-    location: 'main' | 'editor' | 'other'
+    location: 'main' | 'editor' | 'other' | 'article'
     publish?: () => void
 }
 
@@ -61,7 +61,7 @@ export default function Header({location,publish} : Props){
             <div className = {style.inner_header}>
                 <div className = {style.logo_container}>
                     {
-                        isSidebarMobile &&
+                        (typeof window !== undefined) &&
                                             <button className = {style.icon} onClick={toggleSidebar}>
                                                 <Menu size={30}/>
                                             </button>

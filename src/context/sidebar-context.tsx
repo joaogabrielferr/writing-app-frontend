@@ -14,7 +14,7 @@ const SidebarContext = createContext<Props | undefined>(undefined);
 export const SidebarProvider = ({children} : {children:ReactNode}) =>{
 
     const [isMobile,setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 1200);
-    const [isToggleVisible,setIsToggleVisible] = useState(false);
+    const [isToggleVisible,setIsToggleVisible] = useState(true);
 
     useEffect(()=>{
         function adjust(){
@@ -29,7 +29,12 @@ export const SidebarProvider = ({children} : {children:ReactNode}) =>{
     
         },[]);
 
-    useEffect(()=>setIsToggleVisible(false),[isMobile]);
+    useEffect(()=>{
+        console.log("toggling visibility of sidebar");
+        if(isMobile){
+            setIsToggleVisible(false);
+        }
+    },[isMobile]);
 
 
     return <SidebarContext.Provider value = {{isSidebarMobile:isMobile,isToggleVisible,setIsToggleVisible}}>

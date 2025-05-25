@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from "react";
-import { useEditor } from '@tiptap/react'
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Editor, useEditor } from '@tiptap/react'
 import Header from "../_components/header/header";
 import EditorWrapper from "../_components/editor/editor-wrapper";
 import Modal from "../_components/modal/modal";
@@ -56,6 +56,19 @@ export default function WritePage(){
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
 
+    // Refs to hold the latest title and subtitle for the debounced save function.
+    const latestTitleRef = useRef(title);
+    const latestSubtitleRef = useRef(subtitle);
+
+
+    useEffect(() => {
+        latestTitleRef.current = title;
+    }, [title]);
+
+    useEffect(() => {
+        latestSubtitleRef.current = subtitle;
+    }, [subtitle]);
+
     const editor = useEditor({
         extensions: [
           StarterKit,Image,Underline,Dropcursor,
@@ -65,6 +78,9 @@ export default function WritePage(){
           }),
         ],
         immediatelyRender:false,
+        onUpdate: () => {
+            debouncedSaveRef.current?.(); // Call the debounced save function
+        }
       });
 
     if(!AuthIsLoading && !isAuthenticated && router){
@@ -88,37 +104,6 @@ export default function WritePage(){
 
     },[editor,draftInitialized]);
 
-      useEffect(()=>{
-
-        const saveData = () =>{
-          if (!editor) return;
-      
-          const content = editor?.getHTML();
-          const images:string[] = [];
-          editor.state.doc.descendants((node) => {
-            if (node.type.name === 'image' && node.attrs.src) {
-              images.push(node.attrs.src);
-            }
-          });
-      
-  
-          localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title,subtitle}));          
-
-        }
-
-        const debouncedSave = debounce(saveData,5000);
-
-        if(editor){
-          debouncedSave();
-        }
-
-        return () =>{
-          debouncedSave.cancel();
-        }
-
-          
-      },[editor,title,subtitle]);
-
 
     function handleAction(){
       console.log("aqui");
@@ -129,8 +114,10 @@ export default function WritePage(){
         (response)=>{
           console.log(response);
           setIsErrorModalOpen(false);
-          //TODO: also clear draft
-          //TODO: retrieve user username and use it to navigate
+          
+          localStorage.removeItem(DRAFT_LOCAL_STORAGE_KEY);
+          localStorage.removeItem(ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY);
+
           setTimeout(()=>{
             router.push(`/${user!.username}`);
           },500);
@@ -163,7 +150,7 @@ export default function WritePage(){
      localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY,JSON.stringify({content,images,title,subtitle} as Draft));
 
 
-     //images uploaded but removed later by user
+     //images uploaded but removed later by user (TODO: maybe remove it from bucket)
      const data = localStorage.getItem(ALL_IMAGES_ADDED_LOCAL_STORAGE_KEY);
      if(data){
       const allImages = JSON.parse(data);
@@ -186,7 +173,6 @@ export default function WritePage(){
         return;
       }
 
-      //replace "" with '' to send via json
       content = content?.replaceAll("(?<=\\s\\w+)=\\\"([^\\\"]*)\\\"", "='$1'");
       const article  = {
         title,
@@ -195,12 +181,73 @@ export default function WritePage(){
         thumbnailUrl: images?.[0] || null,
         authorUsername:user?.username
       } as Preview;
-      console.log(article);
+
       setPreview(article);
 
       setIsPreviewModalOpen(true);
     
     }
+
+      const performSaveToLocalStorage = useCallback((currentEditor: Editor | null) => {
+      if (!currentEditor || !currentEditor.state || !currentEditor.state.doc) {
+          console.log("Debounced save: Editor not ready or state missing at time of save execution.");
+          return;
+      }
+
+      const currentTitle = latestTitleRef.current;
+      const currentSubtitle = latestSubtitleRef.current;
+
+      console.log("Debounced save: PERFORMING SAVE with title:", currentTitle, "subtitle:", currentSubtitle);
+      const content = currentEditor.getHTML();
+      const images: string[] = [];
+      currentEditor.state.doc.descendants((node) => {
+          if (node.type.name === 'image' && node.attrs.src) {
+              images.push(node.attrs.src as string);
+          }
+      });
+
+      localStorage.setItem(DRAFT_LOCAL_STORAGE_KEY, JSON.stringify({
+          content,
+          images,
+          title: currentTitle,
+          subtitle: currentSubtitle
+      }));
+  }, []); 
+
+  const debouncedSave = useMemo(() => {
+        // Pass the current `editor` instance to `performSaveToLocalStorage` when called.
+        // This ensures the save function operates on the correct editor instance
+        // that was active when the debounce was initiated or re-triggered.
+        const callback = () => {
+             if (editor) { // Check if editor is initialized
+                performSaveToLocalStorage(editor);
+             }
+        }
+        return debounce(callback, 3000); 
+    }, [editor, performSaveToLocalStorage]); 
+
+    // Store the debounced function in a ref so onUpdate can call the latest version
+    // without causing onUpdate to be re-created frequently if debouncedSave identity changes.
+    const debouncedSaveRef = useRef(debouncedSave);
+    useEffect(() => {
+        debouncedSaveRef.current = debouncedSave;
+    }, [debouncedSave]);
+
+    // Effect to trigger debounced save also when title or subtitle change (from input fields)
+    useEffect(() => {
+        console.log("Title or Subtitle changed, triggering debounced save.");
+        debouncedSaveRef.current?.(); // Call the debounced save function
+
+    }, [title, subtitle]);
+
+    // General cleanup for the main debounced function when EditPage unmounts
+    // or if the editor instance itself were to change fundamentally.
+    useEffect(() => {
+        return () => {
+            console.log("EditPage unmounting or editor changing: Cancelling main debounced save.");
+            debouncedSaveRef.current?.cancel();
+        };
+    }, []); // Run only on mount and unmount for this cleanup. Relies on debouncedSaveRef.current
 
 
     function changeImage(index: number){

@@ -6,10 +6,23 @@
 }
 
 .mainPageSection {
-  display: grid;
-  grid-template-columns: 1fr 380px;
+  /* display: grid;
+  grid-template-columns: 1fr 350px; */
+  display: flex;
   margin-top: 20px;
+  width: 90%;
+  position: relative;
+  gap: 20px;
 }
+
+.teste{
+  width:380px;
+  height: 500px;
+  position: sticky;
+  top: 50px;
+}
+
+
 
 .tags {
   width: 100%;
@@ -45,10 +58,14 @@
 
 
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 960px) {
   .mainPageSection {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .teste{
+    display: none;
   }
 }

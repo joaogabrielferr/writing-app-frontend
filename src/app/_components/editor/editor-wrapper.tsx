@@ -71,42 +71,36 @@ export default function EditorWrapper({editor,onTitleChange,onSubtitleChange,tit
       setIsMobile(typeof window !== 'undefined' && window.innerWidth < 1250);
     }
 
-    //scroll the page if the last paragraph is two close to the end of the page
-    function checkCaretPosition() {
-      const selection = document.getSelection();
-      if (!selection || selection.rangeCount === 0) return;
-  
-      const range = selection.getRangeAt(0);
-      let node = range.startContainer;
-  
-      while (node && node.nodeType !== Node.ELEMENT_NODE) {
-        node = node.parentNode!;
-      }
-  
-      if (!node || !(node instanceof HTMLElement)) return;
-  
-      const editorEl = document.querySelector(".editor");
-      if (!editorEl || !editorEl.contains(node)) return;
+    function scrollIfCaretNearBottom(threshold = 100, scrollAmount = 150) {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || !selection.isCollapsed) return;
 
-      const nodeRect = node.getBoundingClientRect();
-      const viewportBottom = window.innerHeight;
-      const distanceFromBottom = viewportBottom - nodeRect.bottom;
-      const threshold = 180;
-      if (distanceFromBottom < threshold) {
-        window.scrollBy({
-          top: threshold - distanceFromBottom,
-          behavior: "smooth",
-        });
+      const range = selection.getRangeAt(0).cloneRange();
+      range.collapse(true);
+
+      const rects = range.getClientRects();
+      if (!rects || rects.length === 0) return;
+
+      const caretRect = rects[0];
+      const caretBottom = caretRect.bottom;
+      const viewportHeight = window.innerHeight;
+
+      const distanceToBottom = viewportHeight - caretBottom;
+
+      if (distanceToBottom < threshold) {
+        console.log("distance to bottom:",distanceToBottom);
+        window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
       }
-    }
+}
   
     let lastCheck = 0;
-    const throttleDelay = 300; // milliseconds
+    const throttleDelay = 150;
   
     function handleKeydown() {
       const now = Date.now();
+      console.log("aqui");
       if (now - lastCheck > throttleDelay) {
-        checkCaretPosition();
+        scrollIfCaretNearBottom();
         lastCheck = now;
       }
     }
@@ -297,6 +291,7 @@ export default function EditorWrapper({editor,onTitleChange,onSubtitleChange,tit
     >
       {uploadImageError}
     </Modal>
+
 
     {isUploadingImage && <FullscreenLoader text="Uploading your image..." />}
     </div>

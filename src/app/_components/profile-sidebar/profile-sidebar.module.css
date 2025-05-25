@@ -1,31 +1,23 @@
 .aside {
-  position: relative;
-  /* background-color: #525252; */
-  width: 100%;
-  
-}
-
-.inner_aside {
-  border-radius: 10px;
-  position: sticky;
-  top: 60px;
+  /* width:380px;
   height: 500px;
-  margin-left: 5px;
-  overflow-y: auto; 
+  background-color: aqua;
+  position: sticky;
+  top: 50px; */
+  width:450px;
+  position: sticky;
+  top: 80px;
+  border-left: 1px solid rgb(78, 78, 78);
+  height: calc(100vh - 80px); 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-right: 7px;
-  background-color: #0e0e0e;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-
-  scrollbar-width: thin; 
+  overflow-y: auto; 
+  /* background-color: #2e2e2e; */
+  scrollbar-width: thin;
   scrollbar-color: transparent transparent;
-  /* scrollbar-color: rgba(255, 255, 255, 0.5) transparent; */
-
-  
 }
-
 .content{
   /* background-color: #0a0a0a; */
   width: 100%;

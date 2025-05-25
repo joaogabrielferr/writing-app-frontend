@@ -19,6 +19,7 @@ export default function Feed() {
     const [articles,setArticles] = useState<Article[]>([]);
     const {isAuthenticated,isLoading} = useUser();
     const router = useRouter();
+    const [isLoadingArticles,setIsLoadingArticles] = useState(false);
 
     useEffect(()=>{
 
@@ -28,11 +29,14 @@ export default function Feed() {
         }
 
         if(!isLoading && isAuthenticated){
-          api.get<{content:Article[]}>("/articles").then((response)=>{
-              setArticles(response.data.content);
-          }).catch(()=>{
-              setArticles([]);
-          });
+            setIsLoadingArticles(true);
+            api.get<{content:Article[]}>("/articles").then((response)=>{
+                setArticles(response.data.content);
+            }).catch(()=>{
+                setArticles([]);
+            }).finally(()=>{
+              setIsLoadingArticles(false);
+            });
 
 
         }
@@ -46,7 +50,7 @@ export default function Feed() {
   if(isAuthenticated){
       return (
         <>
-            <Shell>
+            <Shell location="main">
                   {/* <div id = "__banner__">
                     content
                   </div> */}
@@ -61,10 +65,9 @@ export default function Feed() {
                     <button>Travel</button>
                   </div> */}
                   <section className = {styles.mainPageSection}>
-                    <article>
                       <ArticlesList articles={articles}></ArticlesList>
-                    </article>
-                    <SecondarySidebar></SecondarySidebar>
+                      {/* <div className = {styles.teste}></div> */}
+                      <SecondarySidebar/>
                   </section>
     
             </Shell>

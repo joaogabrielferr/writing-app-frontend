@@ -14,8 +14,7 @@ export default function ArticlesList({articles} : Props){
 
     // const [error,setError] = useState<boolean>(false);
 
-
-
+    
     // if(error){
     //     return <div  className = {style.articles_list}>
     //         There was a problem loading the articles. Please try again later.
@@ -25,6 +24,7 @@ export default function ArticlesList({articles} : Props){
     if(!articles?.length){
         return <div className = {style.articles_list}>
             <div>
+
                 {
                     [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(i => <ArticlePreviewSkeleton key = {i}></ArticlePreviewSkeleton>)
                 }            
@@ -37,7 +37,7 @@ export default function ArticlesList({articles} : Props){
         <div className = {style.articles_list}>
             <div>
                 {    
-                    articles.map(a => <ArticlePreview article={a} key = {a.id}></ArticlePreview>)
+                    articles.map(a => <ArticlePreview isUser={false} article={a} key = {a.id}></ArticlePreview>)
                 }            
             </div>
             <div className = {style.load_more}>

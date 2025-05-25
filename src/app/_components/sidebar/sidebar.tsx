@@ -84,11 +84,11 @@ function SidebarShell({children}:{children:ReactNode}){
     const {isSidebarMobile,isToggleVisible} = useSidebar();
 
     const showMobileSidebar = isSidebarMobile && isToggleVisible;
-    const showNormalSidebar = !isSidebarMobile;
+    const showNormalSidebar = !isSidebarMobile &&  isToggleVisible;
 
     if(showNormalSidebar){
         return (
-            <aside className = {style.aside}>
+            <aside className = {`${style.aside}`}>
                 <div className = {style.content}>
                     {children}
                 </div>

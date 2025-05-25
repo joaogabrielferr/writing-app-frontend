@@ -81,7 +81,7 @@ export default function UserProfilePage(){
     }
 
     return (
-        <Shell>
+        <Shell location="other">
             <div className = {styles.mainPageSection}>
                 <div className = {styles.left}>
                     <h1>{username ? "/" + username : null}</h1>
@@ -89,7 +89,7 @@ export default function UserProfilePage(){
                         {
                             profileDataIsLoading 
                             ?
-                            loadingSkeleton() 
+                            loadingSkeleton()    
                             : 
                             (
                                 error ? <div>We couldn&apos;t load the articles. Please try again later.</div> 
@@ -100,9 +100,8 @@ export default function UserProfilePage(){
                         }
                     </div>
                 </div>
-                <div className = {styles.right}>
-                    <ProfileSidebar/>
-                </div>
+                <ProfileSidebar/>
+
             </div>
         </Shell>
 
