@@ -1,7 +1,6 @@
 'use client'
 
 import { Article } from "@/models/article";
-import Header from "../_components/header/header";
 import { useEffect, useState } from "react";
 import SplashScreenOverlay from "../_components/splash-screen/splash-screen";
 import { useUser } from "@/context/auth-context";
@@ -12,6 +11,7 @@ import { useParams } from 'next/navigation';
 import ArticlePreview from "../_components/article-preview/article-preview";
 import ProfileSidebar from "../_components/profile-sidebar/profile-sidebar";
 import Shell from "../_components/shell/shell";
+import Modal from "../_components/modal/modal";
 
 
 export default function UserProfilePage(){
@@ -25,13 +25,10 @@ export default function UserProfilePage(){
 
     const { isAuthenticated, isLoading: authIsLoading,user } = useUser();
 
+    const [currentArticle,setCurrentArticle] = useState<Article>();
 
-    const loadUserInfo = () =>{
-
-
-
-    }
-
+    const [isModalOpen,setIsModalOpen] = useState(false);
+    const [isModalErrorOpen,setModalErrorOpen] = useState(false);
 
     useEffect(() => {
         if (!authIsLoading && params?.user) {
@@ -61,7 +58,33 @@ export default function UserProfilePage(){
             };
             loadProfileData();
         }
-    }, [params,authIsLoading, isAuthenticated]); 
+    }, [params,authIsLoading, isAuthenticated]);
+
+
+    
+
+    const deleteArticle = async (article:Article) =>{
+        setCurrentArticle(article);
+        setIsModalOpen(true);
+    }
+    
+    const onDeleteArticle = async () =>{
+        if(!currentArticle){
+            setIsModalOpen(false);
+            setModalErrorOpen(true);
+            return;
+        }
+        setIsModalOpen(false);
+        setArticles(prev => prev.filter(a => a.id !== currentArticle.id));
+        try{
+            await api.delete(`/articles/${currentArticle.id}`);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        }catch(err){
+            // setModalErrorOpen(true);
+        }
+        
+    }
 
     
     if (authIsLoading) {
@@ -70,7 +93,6 @@ export default function UserProfilePage(){
 
 
     const loadingSkeleton = () =>{
-        console.log("aqui!!!!!!!");
         return (
             <div>
                 {
@@ -94,14 +116,37 @@ export default function UserProfilePage(){
                             (
                                 error ? <div>We couldn&apos;t load the articles. Please try again later.</div> 
                                 : articles?.map(a=>{
-                                    return <ArticlePreview isUser = {username === user?.username} article={a} key={a.id}></ArticlePreview>
+                                    return <ArticlePreview isUser = {username === user?.username} article={a} key={a.id} deleteArticle={deleteArticle}></ArticlePreview>
                                 })
                             )
                         }
                     </div>
                 </div>
                 <ProfileSidebar/>
-
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={()=>setIsModalOpen(false)}
+                    title="Confirm your action"
+                    size="medium"
+                    actionText="Delete"
+                    showCancelButton={true}
+                    onAction={onDeleteArticle}
+                    loading={false}
+                >
+                    Are you sure you want to delete the story {currentArticle?.title ? '"' + currentArticle.title + '"' : '' }?
+                </Modal>
+                <Modal
+                    isOpen={isModalErrorOpen}
+                    onClose={()=>setModalErrorOpen(false)}
+                    title="Whoops"
+                    size="small"
+                    actionText="Close"
+                    showCancelButton={false}
+                    onAction={()=>setModalErrorOpen(false)}
+                    loading={false}
+                >
+                    We couldn&apos;t delete this article. Please try again later.
+                </Modal>
             </div>
         </Shell>
 

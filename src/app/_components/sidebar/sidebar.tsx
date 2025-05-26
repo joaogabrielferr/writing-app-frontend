@@ -100,7 +100,7 @@ function SidebarShell({children}:{children:ReactNode}){
                 <div className = {style.content}>
                     {children}
                 </div>
-                </aside>
+            </aside>
         )
     }
 

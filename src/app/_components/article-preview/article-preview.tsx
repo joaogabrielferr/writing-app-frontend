@@ -4,17 +4,21 @@ import { Article } from "@/models/article";
 import Link from "next/link";
 import { EllipsisVertical, Heart, MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Modal from "../modal/modal";
+import api from "@/lib/api";
 
 interface props{
     article: Article;
     isUser:boolean;
+    deleteArticle?: (article:Article)=>void;
 }
 
-export default function ArticlePreview({article,isUser} : props) : JSX.Element{
+export default function ArticlePreview({article,isUser,deleteArticle} : props) : JSX.Element{
 
     const [dropdownOpen,setDropdownOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    
+
+
     const router = useRouter();
 
     useEffect(() => {
@@ -31,6 +35,7 @@ export default function ArticlePreview({article,isUser} : props) : JSX.Element{
         router.push(`/edit/${article.id}`);
     }
 
+
     return (
         <div className = {style.preview}>
             <div className={style.header}>
@@ -43,10 +48,10 @@ export default function ArticlePreview({article,isUser} : props) : JSX.Element{
                         )
                     }
                     {
-                        (isUser && dropdownOpen) && (
+                        (isUser && deleteArticle && dropdownOpen) && (
                         <div className={style.dropdown}>
                             <button onClick={navigateToEdit} className={style.dropdownItem}>Edit</button>
-                            <button className={`${style.dropdownItem} ${style.danger}`}>Remove</button>
+                            <button onClick={()=> deleteArticle(article)} className={`${style.dropdownItem} ${style.danger}`}>Remove</button>
                         </div>
 
                         )
@@ -57,7 +62,6 @@ export default function ArticlePreview({article,isUser} : props) : JSX.Element{
                     !isUser ? <div>@{article.author.username}</div> : null
 
                 }
-                 {/* {!!article.community ? " for " + article.community.name : ''} */}
             </div>
                 <Link href={`${article.author.username}/${article.slug}`} className = {style.link}>
                     <div className = {style.container}>
@@ -87,6 +91,7 @@ export default function ArticlePreview({article,isUser} : props) : JSX.Element{
                         </span>
                     </div>
                 </Link>
+
         </div>
     );
     

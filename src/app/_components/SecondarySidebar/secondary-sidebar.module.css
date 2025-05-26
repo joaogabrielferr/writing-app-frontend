@@ -19,9 +19,6 @@
   scrollbar-color: transparent transparent;
 }
 
-.inner_aside {
-  
-}
 
 .content{
   /* background-color: #0a0a0a; */
@@ -34,7 +31,7 @@
 }
 
 .inner_content{
-  width: 95%;
+  width: 97%;
   margin: 0 auto;
   /* margin-top: 5px; */
 }

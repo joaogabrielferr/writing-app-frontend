@@ -3,9 +3,7 @@
 
 import { useUser } from "@/context/auth-context";
 import ArticlesList from "../_components/articles-list/articles-list";
-import Header from "../_components/header/header";
 import SecondarySidebar from "../_components/SecondarySidebar/secondary-sidebar";
-import Sidebar from "../_components/sidebar/sidebar";
 import styles from "./feed.module.css"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,6 +18,7 @@ export default function Feed() {
     const {isAuthenticated,isLoading} = useUser();
     const router = useRouter();
     const [isLoadingArticles,setIsLoadingArticles] = useState(false);
+    const [error,setError] = useState(false);
 
     useEffect(()=>{
 
@@ -28,20 +27,32 @@ export default function Feed() {
           return;
         }
 
-        if(!isLoading && isAuthenticated){
-            setIsLoadingArticles(true);
-            api.get<{content:Article[]}>("/articles").then((response)=>{
-                setArticles(response.data.content);
-            }).catch(()=>{
+        const loadArticles = async () =>{
+          
+              setIsLoadingArticles(true);
+              try{
+                const response = await api.get<{content:Article[]}>("/articles");
+                setError(false);
+                setArticles(response?.data?.content || []);
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              }catch(err){
+                setError(true);
                 setArticles([]);
-            }).finally(()=>{
-              setIsLoadingArticles(false);
-            });
-
-
+              }finally{
+                setIsLoadingArticles(false);
+              }
+              
+          
         }
 
+        if(!isLoading && isAuthenticated){
+          loadArticles();
+        }
+
+
+
     },[isAuthenticated,isLoading,router]);
+
 
   if(isLoading){
     return <SplashScreenOverlay/>
@@ -51,22 +62,9 @@ export default function Feed() {
       return (
         <>
             <Shell location="main">
-                  {/* <div id = "__banner__">
-                    content
-                  </div> */}
-    
-                  {/* <div id = "__tags__">
-                    <button>Self improvement</button>
-                    <button>Relationships</button>
-                    <button>Technology</button>
-                    <button>Gaming</button>
-                    <button>Politics</button>
-                    <button>Marketing</button>
-                    <button>Travel</button>
-                  </div> */}
+                  <div className={styles.teste}>teste</div>
                   <section className = {styles.mainPageSection}>
-                      <ArticlesList articles={articles}></ArticlesList>
-                      {/* <div className = {styles.teste}></div> */}
+                      <ArticlesList articles={articles} loadingArticles={isLoadingArticles} error={error}></ArticlesList>
                       <SecondarySidebar/>
                   </section>
     

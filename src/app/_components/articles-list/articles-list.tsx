@@ -8,20 +8,15 @@ import Button from "../button/button";
 
 interface Props{
     articles: Article[];
+    loadingArticles:boolean;
+    error:boolean;
 }
 
-export default function ArticlesList({articles} : Props){
+export default function ArticlesList({articles,loadingArticles,error} : Props){
 
-    // const [error,setError] = useState<boolean>(false);
 
     
-    // if(error){
-    //     return <div  className = {style.articles_list}>
-    //         There was a problem loading the articles. Please try again later.
-    //     </div>
-    // }
-    
-    if(!articles?.length){
+    if(loadingArticles){
         return <div className = {style.articles_list}>
             <div>
 
@@ -31,6 +26,14 @@ export default function ArticlesList({articles} : Props){
             </div>
         </div>
 
+    }
+
+    if(error){
+    return (
+        <div className = {style.articles_list}>
+            Whoops! We couldn&apos;t load the stories for now...
+        </div>
+    );
     }
 
     return (

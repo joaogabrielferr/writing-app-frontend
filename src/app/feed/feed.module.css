@@ -16,10 +16,14 @@
 }
 
 .teste{
-  width:380px;
-  height: 500px;
-  position: sticky;
-  top: 50px;
+  width: 90%;
+  background-color: aqua;
+  height: 200px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 45px;
+
 }
 
 
