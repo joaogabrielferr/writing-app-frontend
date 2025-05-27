@@ -14,11 +14,11 @@ export default function Shell({children,location} : PropsWithChildren<Props>){
 
     const {isSidebarMobile,isToggleVisible,setIsToggleVisible} = useSidebar();
     
-    useEffect(()=>{
-        if(location == "article"){
-            setIsToggleVisible(false);
-        }
-    },[location,setIsToggleVisible]);
+    // useEffect(()=>{
+    //     if(location == "article"){
+    //         setIsToggleVisible(false);
+    //     }
+    // },[location,setIsToggleVisible]);
 
     console.log(isToggleVisible,isSidebarMobile);
     return <>

@@ -7,7 +7,6 @@
   width:450px;
   position: sticky;
   top: 80px;
-  border-left: 1px solid rgb(78, 78, 78);
   height: calc(100vh - 80px); 
   display: flex;
   flex-direction: column;

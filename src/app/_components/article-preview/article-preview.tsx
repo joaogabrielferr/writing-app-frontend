@@ -40,6 +40,9 @@ export default function ArticlePreview({article,isUser,deleteArticle} : props) :
         <div className = {style.preview}>
             <div className={style.header}>
                 <div className = {style.innerHeader} ref={menuRef}>
+                    
+                
+                <div><Link href={`/${article.author.username}`}><span className = {style.name}>{article.author.name}</span> | <span className = {style.username}>@{article.author.username}</span></Link></div>
                     {
                         isUser && (
                         <button className = {style.buttonIcon} onClick={()=>setDropdownOpen(prev => !prev)}>
@@ -56,12 +59,9 @@ export default function ArticlePreview({article,isUser,deleteArticle} : props) :
 
                         )
                     }
-                    
-                </div>
-                {
-                    !isUser ? <div>@{article.author.username}</div> : null
 
-                }
+                
+                </div>
             </div>
                 <Link href={`${article.author.username}/${article.slug}`} className = {style.link}>
                     <div className = {style.container}>

@@ -9,6 +9,7 @@ import api from '@/lib/api';
 import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Spinner } from '../_components/spinner/spinner';
 
 // --- Constants ---
 const MIN_PASSWORD_LENGTH = 6;
@@ -231,7 +232,8 @@ export default function RegisterPage() {
       await register({ 
         email: formData.email, 
         username: formData.username, 
-        password: formData.password 
+        password: formData.password,
+        name: formData.name
       });
       router.push('/login?registered=true');
     } catch (err) {
@@ -251,7 +253,7 @@ export default function RegisterPage() {
     setErrors(prev => ({ email: prev.email }));
   };
 
-  if (isAuthLoading || isAuthenticated) { // Show splash screen if auth is loading or user is already authenticated (before redirect)
+  if (isAuthenticated) { // Show splash screen is already authenticated (before redirect)
     return <SplashScreenOverlay />;
   }
 
@@ -286,7 +288,7 @@ export default function RegisterPage() {
               className={styles.button} 
               disabled={loadingStates.emailCheck}
             >
-              {loadingStates.emailCheck ? 'Validating...' : 'Advance'}
+              {loadingStates.emailCheck ? <Spinner size={24}/> : 'Advance'}
             </button>
             <div className={styles.footer}>
               Already have an account? <Link className={styles.link} href="/login">Sign in</Link>
@@ -372,7 +374,7 @@ export default function RegisterPage() {
               className={styles.button} 
               disabled={loadingStates.usernameCheck || loadingStates.submitting}
             >
-              {loadingStates.usernameCheck ? 'Checking Username...' : loadingStates.submitting ? 'Signing Up...' : 'Sign Up'}
+              {loadingStates.usernameCheck ? 'Checking Username...' : loadingStates.submitting ? <Spinner size={24}/> : 'Sign Up'}
             </button>
           </>
         )}

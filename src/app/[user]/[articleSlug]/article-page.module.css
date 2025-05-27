@@ -1,19 +1,23 @@
-.mainPageHome {
-  display: flex;
-  width: 100%;
-  /* height: 100vh; */
-  margin-top: 60px;
-}
+
 .container{
   width:99%;
   padding-top: 80px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   border-top-left-radius: 10px;
-  margin-top: 70px;
+  margin-top: 10px;
+  /* background-color: aqua; */
+}
+
+.name{
+    font-weight: bold;
+}
+
+.username{
+    color: gray;
 }
 
 
@@ -49,8 +53,6 @@
     color: var(--foreground);
 }
 
-.content{
-}
 
 .container p{
     margin-bottom: 20px;
@@ -76,87 +78,3 @@
   }
 }
 
-/* 
-.pageEditor {
-    width: 99vw;
-  }
-  
-  .editorContainer {
-    margin: 0 auto;
-    width: 900px;
-    padding-bottom: 100px;
-    margin-top: 100px;
-    margin-bottom: 200px;
-  }
-  
-  .editor {
-    margin: 0 auto;
-    width: 100%;
-    border-radius: 16px;
-    padding: 1rem;
-    line-height: 1.5;
-    background-color: transparent;
-    color: var(--foreground);
-    font-size: 18px;
-  }
-  
-
-  
-  .editor p {
-    margin-bottom: 20px;
-    padding: 10px 0 10px 1px;
-  }
-  
-  .editor h1 {
-    margin-bottom: 40px;
-  }
-  
-  .articleTitle {
-    width: 100%;
-    border: none;
-    min-height: 50px;
-    background-color: transparent;
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 40px;
-    color: var(--foreground);
-  }
-  
-
-  
-  .tiptap img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 1rem auto;
-  }
-  
-
-
-  @media (max-width: 600px) {
-    .tiptap img {
-      height: 200px;
-    }
-  }
-  
-
-
-  .articleSubtitle {
-    width: 100%;
-    border: none;
-    height: 50px;
-    background-color: transparent;
-    font-size: 20px;
-    font-style: italic;
-    margin-bottom: 40px;
-    color: var(--foreground);
-  }
-
-
-
-  @media (max-width: 940px) {
-    .editorContainer {
-      width: 95%;
-      background-color: red;
-    }
-  } */

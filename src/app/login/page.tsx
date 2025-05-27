@@ -5,9 +5,10 @@ import { useUser } from '@/hooks/use-user';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './login.module.css';
-import SplashScreenOverlay from '../_components/splash-screen/splash-screen';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import { Spinner } from '../_components/spinner/spinner';
+import SplashScreenOverlay from '../_components/splash-screen/splash-screen';
 
 
 export default function LoginPage() {
@@ -49,8 +50,8 @@ export default function LoginPage() {
     router.replace("/");
   }
 
-  if(authLoading || isAuthenticated){
-    return <SplashScreenOverlay/>
+  if (isAuthenticated) { // Show splash screen is already authenticated (before redirect)
+    return <SplashScreenOverlay />;
   }
 
   return (
@@ -90,7 +91,7 @@ export default function LoginPage() {
             className={styles.button}
             disabled={submitting}
           >
-            {submitting ? 'Logging in...' : 'Login'}
+            {submitting ? <Spinner size={24}/> : 'Login'}
           </button>
           <div className={styles.footer}>
             Don&apos;t have an account? <Link className = {styles.link} href="/register">Sign up</Link>

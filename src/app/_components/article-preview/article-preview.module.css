@@ -8,16 +8,27 @@
 }
 
 .header {
+    margin-top: 10px;
     height: 10%;
     padding-top: 5px;
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
 }
 
 .innerHeader{
+    width: 100%;
     position:relative;
+    height: 30px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.name{
+    font-weight: bold;
+}
+
+.username{
+    color: gray;
 }
 
 .buttonIcon{

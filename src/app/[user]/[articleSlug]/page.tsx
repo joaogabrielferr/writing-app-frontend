@@ -3,6 +3,8 @@ import style from './article-page.module.css'
 import { Article } from "@/models/article";
 import { notFound } from "next/navigation";
 import Sidebar from "@/app/_components/sidebar/sidebar";
+import Link from "next/link";
+import Shell from "@/app/_components/shell/shell";
 
 export default async function ArticlePage({
   params,
@@ -25,33 +27,10 @@ export default async function ArticlePage({
     return (
       
 
-        //   <Shell location="article">
-        //  <div className = {style.container}>
-        //     <div className = {style.innerContainer}>
-        //       teste
-        //       <div className = {style.title}>{article.title}</div>
-        //       {
-        //         article.subtitle ?
-        //         <div className = {style.subtitle}>
-        //           {article.subtitle}
-        //         </div>
-        //         : null
-        //       }
-
-        //       <article className = { style.content} dangerouslySetInnerHTML={{ __html: article.content }}/>
-
-        //     </div>
-        //  </div>
-        //  </Shell>
-
-        <>
-        <Header location="other"/>
-        <div className = {style.mainPageHome}>
-
-         <Sidebar/>
+          <Shell location="article">
          <div className = {style.container}>
             <div className = {style.innerContainer}>
-              teste
+              <div><Link href={`/${article.author.username}`}><span className = {style.name}>{article.author.name}</span> | <span className = {style.username}>@{article.author.username}</span></Link></div>
               <div className = {style.title}>{article.title}</div>
               {
                 article.subtitle ?
@@ -65,8 +44,31 @@ export default async function ArticlePage({
 
             </div>
          </div>
-        </div>
-         </>
+         </Shell>
+
+        // <>
+        // <Header location="other"/>
+        // <div className = {style.mainPageHome}>
+
+        //  <Sidebar/>
+        //  <div className = {style.container}>
+        //     <div className = {style.innerContainer}>
+        //       <div><Link href={`/${article.author.username}`}><span className = {style.name}>{article.author.name}</span> | <span className = {style.username}>@{article.author.username}</span></Link></div>
+        //       <div className = {style.title}>{article.title}</div>
+        //       {
+        //         article.subtitle ?
+        //         <div className = {style.subtitle}>
+        //           {article.subtitle}
+        //         </div>
+        //         : null
+        //       }
+
+        //       <article className = { style.content} dangerouslySetInnerHTML={{ __html: article.content }}/>
+
+        //     </div>
+        //  </div>
+        // </div>
+        //  </>
 
     );
 

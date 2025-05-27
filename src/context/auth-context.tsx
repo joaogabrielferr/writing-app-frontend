@@ -20,6 +20,7 @@ interface RegisterRequest{
     username:string;
     email:string;
     password:string;
+    name:string;
 }
 
 interface AuthContextType {
