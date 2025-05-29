@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import {  Geist } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/auth-context";
 import { SidebarProvider } from "@/context/sidebar-context";
+import { Roboto } from "next/font/google";
 
-
-const geistSans = Geist({
+const roboto = Roboto({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -23,7 +22,7 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: "Escritr",
-  description: "Your home for writing",
+  description: "Your home for writing"
 };
 
 export default function RootLayout({
@@ -33,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={geistSans.className}>
+      <body className={roboto.className}>
         <AuthProvider>
           <SidebarProvider>
             <div className = "global-container">

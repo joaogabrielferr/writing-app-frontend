@@ -115,9 +115,17 @@ export default function UserProfilePage(){
                             : 
                             (
                                 error ? <div>We couldn&apos;t load the articles. Please try again later.</div> 
-                                : articles?.map(a=>{
-                                    return <ArticlePreview isUser = {username === user?.username} article={a} key={a.id} deleteArticle={deleteArticle}></ArticlePreview>
-                                })
+                                : (
+                                    articles?.length ?
+                                    articles?.map(a=>{
+                                        return <ArticlePreview isUser = {username === user?.username} article={a} key={a.id} deleteArticle={deleteArticle}></ArticlePreview>
+                                    })
+
+                                    : <div>
+                                        You still haven&apos;t write anything.
+                                    </div>
+
+                                )
                             )
                         }
                     </div>

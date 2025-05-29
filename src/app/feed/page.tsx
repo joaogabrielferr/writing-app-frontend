@@ -62,7 +62,9 @@ export default function Feed() {
       return (
         <>
             <Shell location="main">
-                  <div className={styles.teste}>teste</div>
+                  <div className={styles.banner}>
+                    <img src="/banner.jpg"></img>
+                  </div>
                   <section className = {styles.mainPageSection}>
                       <ArticlesList articles={articles} loadingArticles={isLoadingArticles} error={error}></ArticlesList>
                       <SecondarySidebar/>
@@ -74,6 +76,6 @@ export default function Feed() {
       );
   }
 
-  return <FullscreenLoader noText = {true}/>
+  return <FullscreenLoader/>
 
 }

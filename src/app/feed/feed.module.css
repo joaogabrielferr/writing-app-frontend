@@ -15,7 +15,7 @@
   gap: 20px;
 }
 
-.teste{
+.banner{
   width: 90%;
   background-color: aqua;
   height: 200px;
@@ -26,6 +26,11 @@
 
 }
 
+.banner img{
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+}
 
 
 .tags {

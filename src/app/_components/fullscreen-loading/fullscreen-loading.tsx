@@ -5,13 +5,12 @@ import styles from "./fullscreen-loading.module.css";
 
 type FullscreenLoaderProps = {
   text?: string;
-  noText?:boolean;
 };
 
-export const FullscreenLoader: React.FC<FullscreenLoaderProps> = ({ text = "Loading...",noText }) => {
+export const FullscreenLoader: React.FC<FullscreenLoaderProps> = ({ text }) => {
   return (
     <div className={styles.loaderContainer}>
-      {!noText ? <div className={styles.text}>{text}</div> : null}
+      {text ? <div className={styles.text}>{text}</div> : null}
       <div className={styles.spinner} />
     </div>
   );

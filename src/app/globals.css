@@ -64,6 +64,7 @@ a {
   display: flex;
   justify-content: center;
   width: 99vw;
+  /* overflow-x: hidden; */
 }
 
 @media (prefers-color-scheme: dark) {
