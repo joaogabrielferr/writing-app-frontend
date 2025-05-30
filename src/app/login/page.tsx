@@ -151,7 +151,6 @@ export default function LoginPage() {
                 <span className={styles.gsiMaterialButtonContents}>
                   Sign in with Google
                 </span>
-                <span style={{ display: 'none' }}>Sign in with Google</span>
               </div>
             </button>
           </div>

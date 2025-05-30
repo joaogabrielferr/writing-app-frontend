@@ -4,16 +4,22 @@
   justify-content: center;
   align-items: center;
   height: 100dvh;
-  background-color: var(--background);
+  /* background-color: var(--background); */
   color: var(--foreground);
   width: 99vw;
+  position:relative;
+  flex-direction: column;
+}
+
+.logo{
+  margin-bottom: 50px;
 }
 
 .card {
   background-color: #2a2d31;
   padding: 3rem;
   border-radius: 1.5rem;
-  box-shadow: 0 0 2rem #24262a;
+  /* box-shadow: 0 0 1rem #24262a; */
   width: 100%;
   width: 600px;
   display: flex;
@@ -21,6 +27,7 @@
   gap: 2rem;
   min-height: 700px;
 }
+
 
 .logo {
   font-size: 2rem;
@@ -103,6 +110,105 @@
     border-radius: 10px;
     padding: 10px;
 }
+
+.logWith{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.gsiMaterialButton {
+  user-select: none;
+  appearance: none;
+  background-color: white;
+  border: 1px solid #747775;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 14px;
+  height: 50px;
+  letter-spacing: 0.25px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 12px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  width:250px;
+  /* width: auto;
+  max-width: 400px;
+  min-width: min-content; */
+}
+
+.gsiMaterialButtonIcon {
+  height: 20px;
+  margin-right: 12px;
+  min-width: 20px;
+  width: 20px;
+}
+
+.gsiMaterialButtonContentWrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 100%;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+.gsiMaterialButtonContents {
+  flex-grow: 1;
+  font-family: 'Roboto', arial, sans-serif;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+.gsiMaterialButtonState {
+  transition: opacity 0.218s;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.gsiMaterialButton:disabled {
+  cursor: default;
+  background-color: #ffffff61;
+  border-color: #1f1f1f1f;
+}
+
+.gsiMaterialButton:disabled .gsiMaterialButtonContents,
+.gsiMaterialButton:disabled .gsiMaterialButtonIcon {
+  opacity: 38%;
+}
+
+.gsiMaterialButton:not(:disabled):active .gsiMaterialButtonState,
+.gsiMaterialButton:not(:disabled):focus .gsiMaterialButtonState {
+  background-color: #303030;
+  opacity: 12%;
+}
+
+.gsiMaterialButton:not(:disabled):hover {
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+
+}
+
+.gsiMaterialButton:not(:disabled):hover .gsiMaterialButtonState {
+  background-color: #303030;
+  opacity: 8%;
+}
+
 
   @media (max-width: 630px){
     .card{

@@ -2,7 +2,7 @@
 
 :root {
   /* --background: #1c1e21; */
-  --background: #1a1a1b;
+    --background: #161515;
   --foreground: #d1d1d1;
   --purple: #696be7;
     --purple-glow: rgba(138, 43, 226, 0.3);
@@ -11,7 +11,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* --background: #1c1e21; */
-      --background: #1a1a1b;
+      --background: #161515;
     --foreground: #d1d1d1;
     --purple: #696be7;
     --purple-glow: rgba(138, 43, 226, 0.3);
@@ -58,13 +58,13 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 }
 
 .whole-content {
   display: flex;
   justify-content: center;
   width: 99vw;
-  /* overflow-x: hidden; */
 }
 
 @media (prefers-color-scheme: dark) {

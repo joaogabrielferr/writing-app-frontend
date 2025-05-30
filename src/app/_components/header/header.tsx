@@ -76,7 +76,7 @@ export default function Header({location,publish} : Props){
                 } */}
                 <div className = {style.right}>
                     {
-                        ((location === 'main'  || location === 'other') && isAuthenticated) && <Button link="/write"><Pen size = {14}/> Write</Button>
+                        ((location === 'main'  || location === 'other') && isAuthenticated) && <Button link="/write">Write</Button>
                     }
                     {
                         (location === 'editor' && isAuthenticated) && <Button click={publish}>Publish</Button>

@@ -16,20 +16,30 @@
 }
 
 .banner{
-  width: 90%;
-  background-color: aqua;
+  width: 89%;
   height: 200px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-right: 45px;
+  margin-right: 20px;
 
 }
 
 .banner img{
+  border-radius: 20px;
   height: 100%;
-  width: auto;
+  width: 100%;
   object-fit: cover;
+}
+
+@media (max-width:620){
+
+  .banner{
+    height: 150px;
+  }
+  .banner img{
+    object-position: 90% 50%;
+  }
 }
 
 
